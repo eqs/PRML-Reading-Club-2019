@@ -104,9 +104,19 @@
                     \bm \Sigma &= \begin{pmatrix}
                         \bm \Sigma_{aa} & \bm \Sigma_{ab} \\
                         \bm \Sigma_{ba} & \bm \Sigma_{bb} 
-                    \end{pmatrix} \tag{2.67}\\
+                    \end{pmatrix} \tag{2.67}
                 \end{align*}
         \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Definition of Notations}
+        \begin{align*}
+            \bm\Lambda &\equiv \bm\Sigma^{-1} \tag{2.68} \\
+            \bm\Lambda &= \begin{pmatrix}
+                \bm \Lambda_{aa} & \bm \Lambda_{ab} \\
+                \bm \Lambda_{ba} & \bm \Lambda_{bb} 
+            \end{pmatrix} \tag{2.69}
+        \end{align*}
     \end{frame}
     
     \begin{frame}{Derivation of Conditional Gaussian Distribution}
@@ -181,7 +191,52 @@
     \end{frame}
 
     \begin{frame}{Derivation of Conditional Gaussian Distribution}
+        わかったこと
+        \begin{align*}
+            \ln p(\mathbf x_a | \mathbf x_b) 
+            &= -\frac{1}{2}(\mathbf x_a - \bm\mu_{a|b})^\top \bm\Sigma_{a|b}^{-1}(\mathbf x_a - \bm\mu_{a|b}) + \mathrm{const.}
+        \end{align*}
+        \begin{align*}
+            \therefore \; & p(\mathbf x_a | \mathbf x_b) 
+            \propto \exp\left\{-\frac{1}{2}(\mathbf x_a - \bm\mu_{a|b})^\top \bm\Sigma_{a|b}^{-1}(\mathbf x_a - \bm\mu_{a|b}) \right\} \\
+            & \xrightarrow{\mathrm{Normalization}} p(\mathbf x_a | \mathbf x_b) = \mathcal N(\mathbf x_a | \bm\mu_{a|b}, \bm\Sigma_{a|b})
+        \end{align*}
+        \begin{align*}
+            \bm\Sigma_{a|b} &= \bm\Lambda_{aa}^{-1} \tag{2.73}\\
+            \bm\mu_{a|b} &= \bm\mu_a - \bm\Lambda_{aa}^{-1}\bm\Lambda_{ab}(\mathbf x_b - \bm\mu_b) \tag{2.75}
+        \end{align*}
+    \end{frame}
+
+    \begin{frame}{Derivation of Conditional Gaussian Distribution}
     
+    \end{frame}
+
+    \begin{frame}{Derivation of Conditional Gaussian Distribution}
+    
+    \end{frame}
+
+    \begin{frame}{Derivation of Conditional Gaussian Distribution}
+    
+    \end{frame}
+    
+    \begin{frame}{Appendix: Solution of Exercise 2.22}
+        Let $\mathbf A$ be a symmetric matrix ($\mathbf A = \mathbf A^\top$).
+        The inverse matrix $\mathbf A^{-1}$ satisfies
+        \[
+            \mathbf A\mathbf A^{-1} = \mathbf I.
+        \]
+        By taking the transpose of both sides of this equation, 
+        we obtain
+        \[
+            (\mathbf A^{-1})^\top \mathbf A^\top = \mathbf I.
+        \]
+        From the definition of inverse matrix, we obtain
+        \[
+            (\mathbf A^{-1})^\top = \mathbf A^{-1}.
+        \]
+        Therefore, $\mathbf A^{-1}$ is also symmetric matrix.
+        
+
     \end{frame}
 
     
