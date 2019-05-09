@@ -36,6 +36,7 @@
 \newcommand{\bluetext}[1]{\textcolor{blue}{#1}}
 \newcommand{\highlight}[2][yellow]{\tikz[baseline=(x.base)]{\node[rectangle,rounded corners,fill=#1!10](x){$#2$};}}
 \newcommand{\highlightcap}[3][yellow]{\tikz[baseline=(x.base)]{\node[rectangle,rounded corners,fill=#1!10](x){$#2$} node[below of=x, node distance=2em, color=#1]{#3};}}
+\newcommand{\highlightcaphead}[3][yellow]{\tikz[baseline=(x.base)]{\node[rectangle,rounded corners,fill=#1!10](x){$#2$} node[above of=x, node distance=2em, color=#1]{#3};}}
 
 \title{Probability Distributions (PRML \S2.3.1-2.3.7)}
 \date{PRML Reading Club (June 3, 2019)}
@@ -109,8 +110,80 @@
     \end{frame}
     
     \begin{frame}{Derivation of Conditional Gaussian Distribution}
+        From the product rule of probability, 
+        \begin{align*}
+            \highlightcap[blue]{p(\mathbf x_a | \mathbf x_b)}{Unknown}
+            = \frac{\highlightcaphead[red]{p(\mathbf x_a, \mathbf x_b)}{Known}}{\highlightcap[blue]{p(\mathbf x_b)}{Unknown}}
+        \end{align*}
+        両辺の対数をとる
+        \begin{align*}
+            \ln p(\mathbf x_a | \mathbf x_b) 
+            &= \ln p(\mathbf x_a, \mathbf x_b) + \mathrm{const.} \\
+            &= -\frac{1}{2}(\mathbf x - \bm\mu)^\top\bm\Sigma^{-1}(\mathbf x - \bm\mu) + \mathrm{const.}
+        \end{align*}
+
+    \end{frame}
+    
+    \begin{frame}{Derivation of Conditional Gaussian Distribution}
+        \begin{align*}
+            &-\frac{1}{2}(\mathbf x - \bm\mu)^\top \bm\Sigma^{-1}(\mathbf x - \bm\mu) \\
+            &=-\frac{1}{2}(\mathbf x_a - \bm\mu_a)^\top \bm\Lambda_{aa}(\mathbf x_a - \bm\mu_a)
+            -\frac{1}{2}(\mathbf x_a - \bm\mu_a)^\top \bm\Lambda_{ab}(\mathbf x_b - \bm\mu_b) \\
+            &\qquad -\frac{1}{2}(\mathbf x_b - \bm\mu_b)^\top \bm\Lambda_{ba}(\mathbf x_a - \bm\mu_a)
+            -\frac{1}{2}(\mathbf x_b - \bm\mu_b)^\top \bm\Lambda_{bb}(\mathbf x_b - \bm\mu_b) \tag{2.70} \\
+            %---------------
+            &= -\frac{1}{2}\left( \highlight[red]{\mathbf x_a^\top\bm\Lambda_{aa}\mathbf x_a} - \highlight[red]{\mathbf x_a^\top\bm\Lambda_{aa}\bm\mu_a} - 
+                               \highlight[red]{\bm\mu_a^\top\bm\Lambda_{aa}\mathbf x_a} + \bm\mu_a^\top\bm\Lambda_{aa}\bm\mu_a \right) \\
+            &\qquad -\frac{1}{2}\left( \mathbf x_a^\top\bm\Lambda_{ab}\mathbf x_b - \highlight[red]{\mathbf x_a^\top\bm\Lambda_{ab}\bm\mu_b} - 
+                               \bm\mu_a^\top\bm\Lambda_{ab}\mathbf x_b + \bm\mu_a^\top\bm\Lambda_{ab}\bm\mu_b \right) \\
+            &\qquad -\frac{1}{2}\left( \mathbf x_b^\top\bm\Lambda_{ba}\mathbf x_a - \mathbf x_b^\top\bm\Lambda_{ba}\bm\mu_a - 
+                               \highlight[red]{\bm\mu_b^\top\bm\Lambda_{ba}\mathbf x_a} + \bm\mu_b^\top\bm\Lambda_{ba}\bm\mu_a \right) \\
+            &\qquad -\frac{1}{2}\left( \mathbf x_b^\top\bm\Lambda_{bb}\mathbf x_b - \mathbf x_b^\top\bm\Lambda_{bb}\bm\mu_b - 
+                               \bm\mu_b^\top\bm\Lambda_{bb}\mathbf x_b + \bm\mu_b^\top\bm\Lambda_{bb}\bm\mu_b \right) \\
+            &= \highlightcap[red]{\displaystyle -\frac{1}{2}\mathbf x_a^\top\bm\Lambda_{aa}\mathbf x_a}{\small The second order term}
+                + \highlightcap[red]{\mathbf x_a^\top(\bm\Lambda_{aa}\bm\mu_a + \bm\Lambda_{ab}\bm\mu_b)}{The linear term}
+                + \mathrm{const.}
+        \end{align*}
+    \end{frame}
+
+    \begin{frame}{Derivation of Conditional Gaussian Distribution}
+        \begin{block}{Completing the square}
+            \begin{align*} -\frac{1}{2}(\mathbf x - \bm\mu)^\top \bm\Sigma^{-1}(\mathbf x - \bm\mu) =  -\frac{1}{2}\mathbf x^\top\bm\Sigma^{-1}\mathbf x + \mathbf x^\top\bm\Sigma^{-1}\bm\mu + \mathrm{const.} \tag{2.71}
+            \end{align*}
+        \end{block}\vspace{-5mm}
+        \begin{align*}
+            &-\frac{1}{2}(\mathbf x - \bm\mu)^\top \bm\Sigma^{-1}(\mathbf x - \bm\mu) \\
+            &= -\frac{1}{2}\mathbf x_a^\top\bm\Lambda_{aa}\mathbf x_a
+                + \mathbf x_a^\top(\bm\Lambda_{aa}\bm\mu_a + \bm\Lambda_{ab}\bm\mu_b)
+                + \mathrm{const.} \\
+            &=
+            \onslide*<1>{
+                -\frac{1}{2}\mathbf x_a^\top\bm\Lambda_{aa}\mathbf x_a
+                    + \mathbf x_a^\top \bm\Lambda_{aa}\bm\Lambda_{aa}^{-1} (\bm\Lambda_{aa}\bm\mu_a + \bm\Lambda_{ab}\bm\mu_b)
+                    + \mathrm{const.}
+            }
+            \onslide*<2->{
+                -\frac{1}{2}\mathbf x_a^\top\highlightcap[red]{\bm\Lambda_{aa}}{$\bm\Sigma^{-1}$}\mathbf x_a
+                    + \mathbf x_a^\top \highlightcap[red]{\bm\Lambda_{aa}}{$\bm\Sigma^{-1}$}
+                    \highlightcap[blue]{\bm\Lambda_{aa}^{-1} (\bm\Lambda_{aa}\bm\mu_a + \bm\Lambda_{ab}\bm\mu_b)}{$\bm\mu$}
+                    + \mathrm{const.} \\
+            }
+            \onslide<3->{
+                &= -\frac{1}{2}(\mathbf x_a - \bm\mu_{a|b})^\top \bm\Sigma_{a|b}^{-1}(\mathbf x_a - \bm\mu_{a|b}) + \mathrm{const.}
+            }
+        \end{align*}\vspace{-4mm}
+        \onslide<3->{
+            \begin{align*}
+                \bm\Sigma_{a|b} &= \bm\Lambda_{aa}^{-1} \tag{2.73}\\
+                \bm\mu_{a|b} &= \bm\mu_a - \bm\Lambda_{aa}^{-1}\bm\Lambda_{ab}(\mathbf x_b - \bm\mu_b) \tag{2.75}
+            \end{align*}
+        }
+    \end{frame}
+
+    \begin{frame}{Derivation of Conditional Gaussian Distribution}
     
     \end{frame}
+
     
     \begin{frame}{Title}
         \begin{block}{Closed form of conditional Gaussian distribution (still using $\bm\Lambda_{**}$)}
