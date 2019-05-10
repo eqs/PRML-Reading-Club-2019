@@ -299,6 +299,8 @@
         \end{block}
     \end{frame}
     
+    \section{\S2.3.2 Marginal Gaussian Distribution}
+    
     \begin{frame}{Derivation of Marginal Gaussian Distribution}
         \begin{align*}
             p(\mathbf x_a) &= \int p(\mathbf x_a, \mathbf x_b) \:\mathrm d\mathbf x_b \tag{2.83}\\
@@ -388,8 +390,6 @@
     
     \end{frame}
     
-    \section{\S2.3.2 Marginal Gaussian Distribution}
-    
     \begin{frame}{Title}
         \begin{align*}
             p(\mathbf x_a) = \int p(\mathbf x_a, \mathbf x_b)\; \mathrm d\mathbf x_b
@@ -415,6 +415,116 @@
     
     \section{\S2.3.3 Bayes' theorem for Gaussian variables}
     
+    \begin{frame}{Linear Gaussian Model}
+        \begin{align*}
+            p(\mathbf x) &= \mathcal N(\mathbf x | \bm\mu, \bm\Lambda^{-1}) \tag{2.99} \\
+            p(\mathbf x | \mathbf y) &= \mathcal N(\mathbf y | \mathbf A\mathbf x + \mathbf b, \mathbf L^{-1}) \tag{2.100} \\
+        \end{align*}
+    \end{frame}
+    
+    \begin{frame}{Title}
+        \begin{align*}
+            \mathbf z &= \begin{pmatrix}
+                \mathbf x \\ \mathbf y
+            \end{pmatrix} \tag{2.101}
+        \end{align*}
+    \end{frame}
+    
+    \begin{frame}{Derivation of Joint Distribution $p(\mathbf z)$}
+        From the product rule of probability, 
+        \begin{align*}
+            p(\mathbf z) = 
+            \highlightcap[blue]{p(\mathbf x, \mathbf y)}{Unknown}
+            = \highlightcap[red]{p(\mathbf y | \mathbf x)}{Known} \times \highlightcap[red]{p(\mathbf x)}{Known}
+        \end{align*}
+        Take logarithm of both sides, 
+        \begin{align*}
+            \ln p(\mathbf z) 
+            &= \ln p(\mathbf x) + \ln p(\mathbf y | \mathbf x) \\
+            &= -\frac{1}{2}(\mathbf x - \bm\mu)^\top\bm\Lambda(\mathbf x - \bm\mu) \\
+            &\quad -\frac{1}{2}(\mathbf y - \mathbf A\mathbf x - \mathbf b)^\top\mathbf L(\mathbf y - \mathbf A\mathbf x - \mathbf b)
+                + \mathrm{const.} \tag{2.102}
+        \end{align*}
+        Where, (2.102) is a quadratic function of $\mathbf x$ and $\mathbf y$. \par
+        $\Rightarrow$ $p(\mathbf z)$ is Gaussian distribuiton. \par
+        $\Rightarrow$ Completing the square!
+    \end{frame}
+    
+    \begin{frame}{Derivation of Joint Distribution $p(\mathbf z)$}
+        \begin{align*}
+            \ln p(\mathbf z) 
+            &= \ln p(\mathbf x) + \ln p(\mathbf y | \mathbf x) \\
+            &= -\frac{1}{2}(\mathbf x - \bm\mu)^\top\bm\Lambda(\mathbf x - \bm\mu) 
+            -\frac{1}{2}(\mathbf y - \mathbf A\mathbf x - \mathbf b)^\top\mathbf L(\mathbf y - \mathbf A\mathbf x - \mathbf b)
+                + \mathrm{const.} \tag{2.102} \\
+            &= -\frac{1}{2}(\highlight[red]{\mathbf x^\top\bm\Lambda\mathbf x} - \highlight[blue]{\mathbf x^\top\bm\Lambda\bm\mu} - \highlight[blue]{\bm\mu^\top\bm\Lambda\mathbf x} 
+            + \bm\mu^\top\bm\Lambda\bm\mu) \\
+            &\quad -\frac{1}{2}(\highlight[red]{\mathbf y^\top\bm\Lambda\mathbf y} - \highlight[red]{\mathbf y^\top\mathbf L\bm\Lambda\mathbf x} 
+            - \highlight[blue]{\mathbf y^\top\mathbf L\mathbf b} - \highlight[red]{\mathbf x^\top\mathbf A^\top\mathbf L\mathbf y} 
+            - \highlight[blue]{\mathbf b^\top\mathbf L\mathbf y} \\
+            &\qquad + \highlight[red]{\mathbf x^\top\mathbf A^\top\mathbf L\mathbf A\mathbf x} + \highlight[blue]{\mathbf x^\top\mathbf A^\top\mathbf L\mathbf b}
+                + \highlight[blue]{\mathbf b^\top\mathbf L\mathbf A\mathbf x} + \mathbf b^\top\mathbf L\mathbf b)+ \mathrm{const.} \\
+            &= \highlightcap[red]{\displaystyle -\frac{1}{2}\mathbf x^\top(\bm\Lambda + \mathbf A^\top\mathbf L\mathbf A)\mathbf x
+                -\frac{1}{2} \mathbf y^\top\mathbf L\mathbf y 
+                +\frac{1}{2} \mathbf y^\top\mathbf L\mathbf A\mathbf x
+                +\frac{1}{2} \mathbf x^\top\mathbf A^\top\mathbf L\mathbf y}{2.103} \\
+            &\qquad + \highlightcap[blue]{\mathbf x^\top(\bm\Lambda\bm\mu - \mathbf A^\top\mathbf L\mathbf b) + \mathbf y^\top\mathbf L\mathbf b}{2.106} + \mathrm{const.}\\
+        \end{align*}
+    \end{frame}
+
+    \begin{frame}{Derivation of Joint Distribution $p(\mathbf z)$}
+        \vspace*{-5mm}
+        \begin{align*}
+            \ln p(\mathbf z) 
+            &= \ln p(\mathbf x) + \ln p(\mathbf y | \mathbf x) \\
+            &= -\frac{1}{2}(\mathbf x - \bm\mu)^\top\bm\Lambda(\mathbf x - \bm\mu) 
+            -\frac{1}{2}(\mathbf y - \mathbf A\mathbf x - \mathbf b)^\top\mathbf L(\mathbf y - \mathbf A\mathbf x - \mathbf b)
+                + \mathrm{const.} \tag{2.102} \\
+            &= \highlight[red]{\displaystyle -\frac{1}{2}\mathbf x^\top(\bm\Lambda + \mathbf A^\top\mathbf L\mathbf A)\mathbf x
+                -\frac{1}{2} \mathbf y^\top\mathbf L\mathbf y 
+                +\frac{1}{2} \mathbf y^\top\mathbf L\mathbf A\mathbf x
+                +\frac{1}{2} \mathbf x^\top\mathbf A^\top\mathbf L\mathbf y} \\
+            &\qquad + \highlight[blue]{\mathbf x^\top(\bm\Lambda\bm\mu - \mathbf A^\top\mathbf L\mathbf b) + \mathbf y^\top\mathbf L\mathbf b} + \mathrm{const.}\\
+            &= \begin{pmatrix}\mathbf x\\ \mathbf y\end{pmatrix}^\top
+            \highlightcap[green]{\begin{pmatrix}
+                \bm\Lambda + \mathbf A^\top\mathbf L\mathbf A & -\mathbf A^\top\mathbf L \\
+                -\mathbf L\mathbf A& \mathbf L
+            \end{pmatrix}}{$\mathbf R$ (Precision mat)}
+            \begin{pmatrix}\mathbf x\\ \mathbf y\end{pmatrix}
+            + \begin{pmatrix}\mathbf x\\ \mathbf y\end{pmatrix}^\top
+                \highlightcap[green]{\begin{pmatrix}\bm\Lambda\bm\mu - \mathbf A^\top\mathbf L\mathbf b \\ \mathbf L\mathbf b\end{pmatrix}}{$\mathbf m$ (mean vec)} \\
+            & \quad + \mathrm{const.} \\
+            &= \mathbf z^\top\mathbf R\mathbf z + \mathbf z^\top \mathbf m + \mathrm{const.} \\
+            &= \mathbf z^\top\mathbf R\mathbf z + \mathbf z^\top \mathbf R \mathbf R^{-1} \mathbf m + \mathrm{const.} \Longrightarrow \mbox{Completing the square!}
+        \end{align*}
+    \end{frame}
+
     \begin{frame}{Title}
         Hello metropolis!
-    \end{frame}  \begin{frame}{Title} Hello metropolis! \end{frame}  \begin{frame}{Title} Hello metropolis! \end{frame}  \end{document}
+    \end{frame}
+
+    \begin{frame}{Title}
+        Hello metropolis!
+    \end{frame}
+
+    \begin{frame}{Title}
+        Hello metropolis!
+    \end{frame}
+
+    \begin{frame}{Title}
+        Hello metropolis!
+    \end{frame}
+
+    \begin{frame}{Title}
+        Hello metropolis!
+    \end{frame}
+
+    \begin{frame}{Title}
+        Hello metropolis!
+    \end{frame}
+
+    \begin{frame}{Title}
+        Hello metropolis!
+    \end{frame}
+
+\end{document}
