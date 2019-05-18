@@ -57,6 +57,25 @@
         Hello metropolis!
     \end{frame}
     
+    \begin{frame}{Completing the square (for univariate case)}
+        \begin{itemize}
+            \item Basic idea:
+                \begin{align*}
+                    &x^2 - 6x + 2 \\
+                    \onslide*<2>{&= x^2 - 6x + 9 - 7 \\}
+                    \onslide<3->{&= \highlight[red]{x^2 - 6x + 9} - 7 \\}
+                    \onslide<4->{&= \highlight[red]{(x - 3)^2} - 7}
+                \end{align*}
+            \item Example:
+                \begin{align*}
+                    &\exp\left(-\frac{1}{2}x^2 + 2x + \mathrm{const.}\right) \\
+                    \onslide<6->{&= \exp\left\{-\frac{1}{2}(x^2 - 4x + 4) + \mathrm{const.}\right\} \\}
+                    \onslide*<7>{&= \exp\left\{-\dfrac{(x - 2)^2}{2}\right\}\cdot\exp(\mathrm{const.}) \\ }
+                    \onslide<8->{&= \highlightcap[red]{\exp\left\{-\dfrac{(x - 2)^2}{2}\right\}}{\small Unnormalized Gaussian}\cdot\exp(\mathrm{const.}) }
+                \end{align*}
+        \end{itemize}
+    \end{frame}
+    
     \section{\S2.3.1 Conditional Gaussian Distribution}
     
     \begin{frame}{Conditional Gaussian Distribution}
