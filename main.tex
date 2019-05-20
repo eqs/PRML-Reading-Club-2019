@@ -38,6 +38,20 @@
 \newcommand{\highlightcap}[3][yellow]{\tikz[baseline=(x.base)]{\node[rectangle,rounded corners,fill=#1!10](x){$#2$} node[below of=x, node distance=2em, color=#1]{#3};}}
 \newcommand{\highlightcaphead}[3][yellow]{\tikz[baseline=(x.base)]{\node[rectangle,rounded corners,fill=#1!10](x){$#2$} node[above of=x, node distance=2em, color=#1]{#3};}}
 
+\newenvironment{supframe}[1]{%
+    \setbeamercolor{frametitle}{fg=white!90!purple, bg=mLightGreen!75!black}%
+    \begin{frame}{#1}%
+}{%
+    \end{frame}%
+}
+
+\newcommand{\nbracket}[1]{\left( #1 \right)}
+\newcommand{\cbracket}[1]{\left\{ #1 \right\}}
+\newcommand{\rbracket}[1]{\left[ #1 \right]}
+\newcommand{\abracket}[1]{\left\langle #1 \right\rangle}
+
+\DeclareMathOperator{\tr}{tr}
+
 \title{Probability Distributions (PRML \S2.3.1-2.3.7)}
 \date{PRML Reading Club (June 3, 2019)}
 \author{Satoshi Murashige}
@@ -53,9 +67,9 @@
         \tableofcontents
     \end{frame}
     
-    \begin{frame}{Review: Multivariate Gaussian Distribution}
+    \begin{supframe}{Review: Multivariate Gaussian Distribution}
         Hello metropolis!
-    \end{frame}
+    \end{supframe}
     
     \begin{frame}{Completing the square (for univariate case)}
         \begin{itemize}
@@ -238,7 +252,7 @@
     
     \end{frame}
     
-    \begin{frame}{Appendix: Solution of Exercise 2.22}
+    \begin{supframe}{Solution of Exercise 2.22}
         Let $\mathbf A$ be a symmetric matrix ($\mathbf A = \mathbf A^\top$).
         The inverse matrix $\mathbf A^{-1}$ satisfies
         \[
@@ -256,7 +270,7 @@
         Therefore, $\mathbf A^{-1}$ is also symmetric matrix.
         
 
-    \end{frame}
+    \end{supframe}
 
     
     \begin{frame}{Title}
@@ -519,6 +533,38 @@
     \end{frame}
     
     \section{\S2.3.4 Maximum likelihood for the Gaussian}
+
+    \begin{frame}{Maximum likelihood estimation for the Gaussian}
+        Maximize the likelihood with regard to $\bm\mu$ and $\bm\Sigma^{-1}$ (i.e. precision $\bm\Lambda$)
+        \begin{align*}
+            p(\mathbf X | \bm\mu, \bm\Sigma) = \prod_{n=1}^N
+            \frac{1}{(2\pi)^{D/2}}\frac{1}{|\bm\Sigma|^{1/2}}
+            \exp\left( -\frac{1}{2}(\mathbf x_n - \bm\mu)^\top\bm\Sigma^{-1}(\mathbf x_n - \bm\mu) \right)
+        \end{align*}
+        By taking logarithm, we obtain:
+        \begin{align*}
+            \ln p(\mathbf X | \bm\mu, \bm\Sigma) = 
+            -\frac{ND}{2}\ln(2\pi) - \frac{N}{2}\ln |\bm\Sigma|
+            -\frac{1}{2}\sum_{n=1}^N (\mathbf x_n - \bm\mu)^\top\bm\Sigma^{-1}(\mathbf x_n - \bm\mu)
+            \tag{2.118}
+        \end{align*}
+        Sufficient statistics:
+    \end{frame}
+
+    \begin{supframe}{Proof: }
+        \begin{align*}
+            &-\frac{1}{2}\sum_{n=1}^N (\mathbf x_n - \bm\mu)^\top\bm\Sigma^{-1}(\mathbf x_n - \bm\mu) \\
+            &=-\frac{1}{2}\sum_{n=1}^N \mathbf x_n^\top\bm\Sigma^{-1}\mathbf x_n
+            + \left( \sum_{n=1}^N \mathbf x_n \right)^\top\bm\Sigma^{-1}\bm\mu
+            -\frac{N}{2}\bm\mu^\top\bm\Sigma^{-1}\bm\mu \\
+            &=-\frac{1}{2}\tr\left(\bm\Sigma^{-1}\sum_{n=1}^N \mathbf x_n\mathbf x_n^\top\right)
+            + \left( \sum_{n=1}^N \mathbf x_n \right)^\top\bm\Sigma^{-1}\bm\mu
+            -\frac{N}{2}\bm\mu^\top\bm\Sigma^{-1}\bm\mu \\
+            &=-\frac{1}{2}\tr\nbracket{\bm\Sigma^{-1} \abracket{\mathbf x\mathbf x^\top}}
+            + \abracket{\mathbf x}^\top\bm\Sigma^{-1}\bm\mu
+            -\frac{N}{2}\bm\mu^\top\bm\Sigma^{-1}\bm\mu
+        \end{align*}
+    \end{supframe}
 
     \begin{frame}{Title}
         Hello metropolis!
