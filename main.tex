@@ -93,7 +93,24 @@
     \end{frame}
     
     \begin{frame}{Table of Contents}
-        \tableofcontents
+        \begin{itemize}
+            \item Important properties of Gaussian distributions
+                \begin{itemize}
+                    \item \S2.3.1 Conditional Gaussian Distribution
+                    \item \S2.3.2 Marginal Gaussian Distribution
+                    \item \S2.3.3 Bayes' theorem for Gaussian variables
+                \end{itemize}
+            \item Parameter estimation for the Gaussian
+                \begin{itemize}
+                    \item \S2.3.4 Maximum likelihood for the Gaussian
+                    \item \S2.3.5 Sequential estimation
+                    \item \S2.3.6 Bayesian inference for the Gaussian
+                \end{itemize}
+            \item Students's t-distribution
+                \begin{itemize}
+                    \item \S2.3.7 Students's t-distribution
+                \end{itemize}
+        \end{itemize}
     \end{frame}
     
     \begin{frame}{Completing the square (for univariate case)}
@@ -101,49 +118,39 @@
             \item Basic idea:
                 \begin{align*}
                     &x^2 - 6x + 2 \\
-                    &= \highlight<2->[red]{x^2 - 6x + 9} - 7 \\
-                    \onslide<3->{&= \highlight[red]{(x - 3)^2} - 7}
+                    \onslide<2->{&= \highlight<3->[red]{x^2 - 6x + 9} - 7 \\}
+                    \onslide<4->{&= \highlight[red]{(x - 3)^2} - 7}
                 \end{align*}
             \item Example:
                 \begin{align*}
                     &\exp\left(-\frac{1}{2}x^2 + 2x + \mathrm{const.}\right) \\
-                    \onslide<6->{&= \exp\left\{-\frac{1}{2}(x^2 - 4x + 4) + \mathrm{const.}\right\} \\}
-                    \onslide<7->{&= \highlightcap<8->[red]{\exp\left\{-\dfrac{(x - 2)^2}{2}\right\}}{\small Unnormalized Gaussian}\cdot\exp(\mathrm{const.}) }
+                    \onslide<5->{&= \exp\left\{-\frac{1}{2}(x^2 - 4x + 4) + \mathrm{const.}\right\} \\}
+                    \onslide<6->{&= \highlightcap<7->[red]{\exp\left\{-\dfrac{(x - 2)^2}{2}\right\}}{\small Unnormalized Gaussian}\cdot\exp(\mathrm{const.}) }
                 \end{align*}
         \end{itemize}
     \end{frame}
     
     \section{\S2.3.1 Conditional Gaussian Distribution}
     
-    \begin{frame}{Conditional Gaussian Distribution}
-        Now, we consider to derive the following properties
-        \begin{block}{Properties of conditional Gaussian distribution}
-            \begin{align*}
-                &p(\mathbf x_a, \mathbf x_b) = p(\mathbf x) = \mathcal N(\mathbf x | \bm \mu, \bm \Sigma) 
-                \Rightarrow 
-                \begin{array}{l}
-                     p(\mathbf x_a | \mathbf x_b) = \mathcal N(\mathbf x_a | \bm \mu_{a|b}, \bm \Sigma_{a|b})  \\
-                     p(\mathbf x_a) = \mathcal N(\mathbf x_a | \bm \mu_a, \bm \Sigma_a) 
-                \end{array}
-            \end{align*}
-        \end{block}
+    \begin{frame}{Important properties of Gaussian Distribution}
+        Now, we consider to derive the following properties:
+        \begin{align*}
+            &p(\mathbf x_a, \mathbf x_b) = p(\mathbf x) = \mathcal N(\mathbf x | \bm \mu, \bm \Sigma) 
+            \Rightarrow 
+            \begin{array}{l}
+                 p(\mathbf x_a | \mathbf x_b) = \mathcal N(\mathbf x_a | \bm \mu_{a|b}, \bm \Sigma_{a|b})  \\
+                 p(\mathbf x_a) = \mathcal N(\mathbf x_a | \bm \mu_a, \bm \Sigma_a) 
+            \end{array}
+        \end{align*}
         \begin{center}
             \includegraphics[width=0.45\hsize]{figs/Figure2_9a.pdf}
             \hfill
-            \includegraphics[width=0.45\hsize]{figs/Figure2_9b.pdf}
+            \includegraphics[width=0.45\hsize]{figs/Figure2_9b.pdf} \\
+            Figure 2.9
         \end{center}
     \end{frame}
     
-    \begin{frame}{Examples of $\mathbf x_a$ and $\mathbf x_b$}
-        \begin{exampleblock}{Sequence of a rocket's position}
-            \begin{align*}
-                &\mathbf x_a = x_{t+1} \\
-                &\mathbf x_b = (x_1, x_2, \cdots, x_t)^\top
-            \end{align*}
-        \end{exampleblock}
-    \end{frame}
-    
-    \begin{frame}{Definition of Notation}
+    \begin{frame}{Definition of Notation (1/2)}
         Consider a joint distribution $p(\mathbf x) = \mathcal N(\mathbf x | \bm \mu, \bm \Sigma)$
         \begin{itemize}
             \item Separate a $D$-dimensional vector $\mathbf x \sim \mathcal N(\mathbf x | \bm \mu, \bm \Sigma)$
@@ -162,18 +169,50 @@
                         \bm \Sigma_{ba} & \bm \Sigma_{bb} 
                     \end{pmatrix} \tag{2.67}
                 \end{align*}
+            \item The symmetry $\bm\Sigma^\top = \bm\Sigma$ of the covariance matrix, 
+                \begin{align*}
+                    \bm\Sigma_{aa}^\top = \bm\Sigma_{aa}&, \bm\Sigma_{bb}^\top = \bm\Sigma_{bb} \;\; (\mbox{i.e. symmetry})\\
+                    \bm\Sigma_{ba}^\top &= \bm\Sigma_{ab}
+                \end{align*}
         \end{itemize}
     \end{frame}
 
-    \begin{frame}{Definition of Notations}
-        \begin{align*}
-            \bm\Lambda &\equiv \bm\Sigma^{-1} \tag{2.68} \\
-            \bm\Lambda &= \begin{pmatrix}
-                \bm \Lambda_{aa} & \bm \Lambda_{ab} \\
-                \bm \Lambda_{ba} & \bm \Lambda_{bb} 
-            \end{pmatrix} \tag{2.69}
-        \end{align*}
+    \begin{frame}{Definition of Notation (2/2)}
+        \begin{itemize}
+            \item The \textit{precision matrix} is convenient in many situations.
+                \begin{align*}
+                    \bm\Lambda &\equiv \bm\Sigma^{-1} \tag{2.68} \\
+                    \bm\Lambda &= \begin{pmatrix}
+                        \bm \Lambda_{aa} & \bm \Lambda_{ab} \\
+                        \bm \Lambda_{ba} & \bm \Lambda_{bb} 
+                    \end{pmatrix} \tag{2.69}
+                \end{align*}
+            \item Because the inverse of a symmetric matrix is also symmetric (proof: ex. 2.22), 
+                \begin{align*}
+                    \bm\Lambda_{aa}^\top = \bm\Lambda_{aa}&, \bm\Lambda_{bb}^\top = \bm\Lambda_{bb} \;\; (\mbox{i.e. symmetry})\\
+                    \bm\Lambda_{ba}^\top &= \bm\Lambda_{ab}
+                \end{align*}
+            \item NOTE: Generally, for instance, $\bm\Lambda_{aa} \not = \bm\Sigma_{aa}^{-1}$
+        \end{itemize}
     \end{frame}
+    
+    \begin{supframe}{Solution of Exercise 2.22}
+        Let $\mathbf A$ be a symmetric matrix ($\mathbf A = \mathbf A^\top$).
+        The inverse matrix $\mathbf A^{-1}$ satisfies
+        \[
+            \mathbf A\mathbf A^{-1} = \mathbf I.
+        \]
+        By taking the transpose of both sides of this equation, 
+        we obtain
+        \[
+            (\mathbf A^{-1})^\top \mathbf A^\top = \mathbf I.
+        \]
+        From the definition of inverse matrix, we obtain
+        \[
+            (\mathbf A^{-1})^\top = \mathbf A^{-1}.
+        \]
+        Therefore, $\mathbf A^{-1}$ is also symmetric matrix.
+    \end{supframe}
     
     \begin{frame}{Derivation of Conditional Gaussian Distribution}
         From the product rule of probability, 
@@ -274,27 +313,6 @@
     \begin{frame}{Derivation of Conditional Gaussian Distribution}
     
     \end{frame}
-    
-    \begin{supframe}{Solution of Exercise 2.22}
-        Let $\mathbf A$ be a symmetric matrix ($\mathbf A = \mathbf A^\top$).
-        The inverse matrix $\mathbf A^{-1}$ satisfies
-        \[
-            \mathbf A\mathbf A^{-1} = \mathbf I.
-        \]
-        By taking the transpose of both sides of this equation, 
-        we obtain
-        \[
-            (\mathbf A^{-1})^\top \mathbf A^\top = \mathbf I.
-        \]
-        From the definition of inverse matrix, we obtain
-        \[
-            (\mathbf A^{-1})^\top = \mathbf A^{-1}.
-        \]
-        Therefore, $\mathbf A^{-1}$ is also symmetric matrix.
-        
-
-    \end{supframe}
-
     
     \begin{frame}{Title}
         \begin{block}{Closed form of conditional Gaussian distribution (still using $\bm\Lambda_{**}$)}
