@@ -179,7 +179,7 @@
 
     \begin{frame}{Definition of Notation (2/2)}
         \begin{itemize}
-            \item The \textit{precision matrix} is convenient in many situations.
+            \item The \textit{precision matrix} $\bm\Lambda$ is convenient in many situations
                 \begin{align*}
                     \bm\Lambda &\equiv \bm\Sigma^{-1} \tag{2.68} \\
                     \bm\Lambda &= \begin{pmatrix}
@@ -215,10 +215,16 @@
     \end{supframe}
     
     \begin{frame}{Derivation of Conditional Gaussian Distribution}
+        \begin{block}{Conditional Gaussian Distribution}
+            \[
+                p(\mathbf x_a, \mathbf x_b) = \mathcal N(\mathbf x | \bm\mu, \bm\Sigma)
+                \Rightarrow p(\mathbf x_a | \mathbf x_b) = \mathcal N(\mathbf x_a | \bm\mu_{a|b}, \bm\Sigma_{a|b})
+            \]
+        \end{block}
         From the product rule of probability, 
         \begin{align*}
-            \highlightcap[blue]{p(\mathbf x_a | \mathbf x_b)}{Unknown}
-            = \frac{\highlightcaphead[red]{p(\mathbf x_a, \mathbf x_b)}{Known}}{\highlightcap[blue]{p(\mathbf x_b)}{Unknown}}
+            \highlightcap<2->[blue]{p(\mathbf x_a | \mathbf x_b)}{Unknown}
+            = \frac{\highlightcaphead<2->[red]{p(\mathbf x_a, \mathbf x_b)}{Known}}{\highlightcap<2->[blue]{p(\mathbf x_b)}{Unknown}}
         \end{align*}
         Take the logarithm of both sides, 
         \begin{align*}
@@ -230,6 +236,8 @@
     \end{frame}
     
     \begin{frame}{Derivation of Conditional Gaussian Distribution}
+        Because (2.70) is a quadratic form of $\mathbf x_a$,
+        the corresponding conditional distribution $p(\mathbf x_a | \mathbf x_b)$ will be Gaussian.
         \begin{align*}
             &-\frac{1}{2}(\mathbf x - \bm\mu)^\top \bm\Sigma^{-1}(\mathbf x - \bm\mu) \\
             &=-\frac{1}{2}(\mathbf x_a - \bm\mu_a)^\top \bm\Lambda_{aa}(\mathbf x_a - \bm\mu_a)
@@ -237,6 +245,7 @@
             &\qquad -\frac{1}{2}(\mathbf x_b - \bm\mu_b)^\top \bm\Lambda_{ba}(\mathbf x_a - \bm\mu_a)
             -\frac{1}{2}(\mathbf x_b - \bm\mu_b)^\top \bm\Lambda_{bb}(\mathbf x_b - \bm\mu_b) \tag{2.70} \\
             %---------------
+            \onslide<2->{
             &= -\frac{1}{2}\left( \highlight[red]{\mathbf x_a^\top\bm\Lambda_{aa}\mathbf x_a} - \highlight[red]{\mathbf x_a^\top\bm\Lambda_{aa}\bm\mu_a} - 
                                \highlight[red]{\bm\mu_a^\top\bm\Lambda_{aa}\mathbf x_a} + \bm\mu_a^\top\bm\Lambda_{aa}\bm\mu_a \right) \\
             &\qquad -\frac{1}{2}\left( \mathbf x_a^\top\bm\Lambda_{ab}\mathbf x_b - \highlight[red]{\mathbf x_a^\top\bm\Lambda_{ab}\bm\mu_b} - 
@@ -248,12 +257,14 @@
             &= \highlightcap[red]{\displaystyle -\frac{1}{2}\mathbf x_a^\top\bm\Lambda_{aa}\mathbf x_a}{\small The second order term}
                 + \highlightcap[red]{\mathbf x_a^\top(\bm\Lambda_{aa}\bm\mu_a + \bm\Lambda_{ab}\bm\mu_b)}{The linear term}
                 + \mathrm{const.}
+            }
         \end{align*}
     \end{frame}
 
     \begin{frame}{Derivation of Conditional Gaussian Distribution}
         \begin{block}{Completing the square}
-            \begin{align*} -\frac{1}{2}(\mathbf x - \bm\mu)^\top \bm\Sigma^{-1}(\mathbf x - \bm\mu) =  -\frac{1}{2}\mathbf x^\top\bm\Sigma^{-1}\mathbf x + \mathbf x^\top\bm\Sigma^{-1}\bm\mu + \mathrm{const.} \tag{2.71}
+            \begin{align*} -\frac{1}{2}(\mathbf x - \bm\mu)^\top \bm\Sigma^{-1}(\mathbf x - \bm\mu)
+                = -\frac{1}{2}\mathbf x^\top\bm\Sigma^{-1}\mathbf x + \mathbf x^\top\bm\Sigma^{-1}\bm\mu + \mathrm{const.} \tag{2.71}
             \end{align*}
         \end{block}\vspace{-5mm}
         \begin{align*}
@@ -261,23 +272,18 @@
             &= -\frac{1}{2}\mathbf x_a^\top\bm\Lambda_{aa}\mathbf x_a
                 + \mathbf x_a^\top(\bm\Lambda_{aa}\bm\mu_a + \bm\Lambda_{ab}\bm\mu_b)
                 + \mathrm{const.} \\
-            &=
-            \onslide*<1>{
-                -\frac{1}{2}\mathbf x_a^\top\bm\Lambda_{aa}\mathbf x_a
-                    + \mathbf x_a^\top \bm\Lambda_{aa}\bm\Lambda_{aa}^{-1} (\bm\Lambda_{aa}\bm\mu_a + \bm\Lambda_{ab}\bm\mu_b)
-                    + \mathrm{const.}
-            }
-            \onslide*<2->{
-                -\frac{1}{2}\mathbf x_a^\top\highlightcap[red]{\bm\Lambda_{aa}}{$\bm\Sigma^{-1}$}\mathbf x_a
-                    + \mathbf x_a^\top \highlightcap[red]{\bm\Lambda_{aa}}{$\bm\Sigma^{-1}$}
-                    \highlightcap[blue]{\bm\Lambda_{aa}^{-1} (\bm\Lambda_{aa}\bm\mu_a + \bm\Lambda_{ab}\bm\mu_b)}{$\bm\mu$}
+            \onslide<2->{
+                &=
+                -\frac{1}{2}\mathbf x_a^\top\highlightcap<3->[red]{\bm\Lambda_{aa}}{$\bm\Sigma^{-1}$}\mathbf x_a
+                    + \mathbf x_a^\top \highlightcap<3->[red]{\bm\Lambda_{aa}}{$\bm\Sigma^{-1}$}
+                    \highlightcap<3->[blue]{\bm\Lambda_{aa}^{-1} (\bm\Lambda_{aa}\bm\mu_a + \bm\Lambda_{ab}\bm\mu_b)}{$\bm\mu$}
                     + \mathrm{const.} \\
             }
-            \onslide<3->{
+            \onslide<4->{
                 &= -\frac{1}{2}(\mathbf x_a - \bm\mu_{a|b})^\top \bm\Sigma_{a|b}^{-1}(\mathbf x_a - \bm\mu_{a|b}) + \mathrm{const.}
             }
         \end{align*}\vspace{-4mm}
-        \onslide<3->{
+        \onslide<5->{
             \begin{align*}
                 \bm\Sigma_{a|b} &= \bm\Lambda_{aa}^{-1} \tag{2.73}\\
                 \bm\mu_{a|b} &= \bm\mu_a - \bm\Lambda_{aa}^{-1}\bm\Lambda_{ab}(\mathbf x_b - \bm\mu_b) \tag{2.75}
@@ -286,7 +292,7 @@
     \end{frame}
 
     \begin{frame}{Derivation of Conditional Gaussian Distribution}
-        わかったこと
+        Therefore, 
         \begin{align*}
             \ln p(\mathbf x_a | \mathbf x_b) 
             &= -\frac{1}{2}(\mathbf x_a - \bm\mu_{a|b})^\top \bm\Sigma_{a|b}^{-1}(\mathbf x_a - \bm\mu_{a|b}) + \mathrm{const.}
@@ -302,36 +308,35 @@
         \end{align*}
     \end{frame}
 
-    \begin{frame}{Derivation of Conditional Gaussian Distribution}
-    
-    \end{frame}
-
-    \begin{frame}{Derivation of Conditional Gaussian Distribution}
-    
-    \end{frame}
-
-    \begin{frame}{Derivation of Conditional Gaussian Distribution}
-    
-    \end{frame}
-    
-    \begin{frame}{Title}
-        \begin{block}{Closed form of conditional Gaussian distribution (still using $\bm\Lambda_{**}$)}
-            \begin{align*}
-                 &p(\mathbf x_a | \mathbf x_b) = \mathcal N(\mathbf x_a | \bm \mu_{a|b}, \bm \Sigma_{a|b})  \\
-                 &
-                 \begin{cases}
-                 \bm\Sigma_{a|b} = \bm\Lambda_{aa}^{-1} \\
-                 \bm\mu_{a|b} = \bm\mu_a - \bm\Lambda_{aa}^{-1}\bm\Lambda_{ab}(\mathbf x_a - \bm\mu_b)
-                 \end{cases}
-            \end{align*}
-        \end{block}
+    \begin{frame}{Express the results in terms of the covariance matrix}
         \begin{itemize}
-            \item Where, we don't know a form of $\bm\Lambda_{aa}$ and $\bm\Lambda_{ab}$
+            \item Recall:
+                \begin{align*}
+                    p(\mathbf x_a | \mathbf x_b) &= \mathcal N(\mathbf x_a | \bm\mu_{a|b}, \bm\Sigma_{a|b}) \\
+                    \bm\Sigma_{a|b} &= \bm\Lambda_{aa}^{-1} \tag{2.73}\\
+                    \bm\mu_{a|b} &= \bm\mu_a - \bm\Lambda_{aa}^{-1}\bm\Lambda_{ab}(\mathbf x_b - \bm\mu_b) \tag{2.75}
+                \end{align*}
+            \item The results (2.73) and (2.75) are expressed in terms of the partitioned precision matrix.
+            \item We can also express these results in terms of the corresponding partitioned covariance matrix.
+                \begin{align*}
+                    \begin{pmatrix}
+                        \bm \Sigma_{aa} & \bm \Sigma_{ab} \\
+                        \bm \Sigma_{ba} & \bm \Sigma_{bb} 
+                    \end{pmatrix}^{-1} =
+                    \begin{pmatrix}
+                        \bm \Lambda_{aa} & \bm \Lambda_{ab} \\
+                        \bm \Lambda_{ba} & \bm \Lambda_{bb} 
+                    \end{pmatrix} \tag{2.78}
+                \end{align*}
         \end{itemize}
+        \note{
+            ここまでの議論で導かれた結果は精度行列の言葉で表現したものです．
+            一方，我々はこれを元の共分散行列の言葉でも表現することが可能です．
+        }
     \end{frame}
-    
-    \begin{frame}{Derivation of closed form of $\bm\Lambda_{**}$}
-        \begin{block}{Exercise 2.24}
+
+    \begin{frame}{Express the results in terms of the covariance matrix}
+        \begin{block}{The identity for the inverse of a partitioned matrix (Exercise 2.24)}
             \begin{align*}
                 \begin{pmatrix}
                     \mathbf A & \mathbf B \\
@@ -344,34 +349,32 @@
                 \mathbf M &= (\mathbf A - \mathbf B\mathbf D^{-1}\mathbf C)^{-1} \tag{2.77}
             \end{align*}
         \end{block}
-        \begin{itemize}
-            \item By applying above equations to
-            \[
-                \begin{pmatrix}
-                    \bm \Sigma_{aa} & \bm \Sigma_{ab} \\
-                    \bm \Sigma_{ba} & \bm \Sigma_{bb} 
-                \end{pmatrix}^{-1}
-                =
-                \begin{pmatrix}
-                    \bm \Lambda_{aa} & \bm \Lambda_{ab} \\
-                    \bm \Lambda_{ba} & \bm \Lambda_{bb} 
-                \end{pmatrix}, \tag{2.78}
-            \]
-            \item we cant get
-            \begin{align*}
-            \end{align*}
-        \end{itemize}
+        \vspace{-0.5cm}
+        \begin{align*}
+            \begin{pmatrix}
+                \bm \Sigma_{aa} & \bm \Sigma_{ab} \\
+                \bm \Sigma_{ba} & \bm \Sigma_{bb} 
+            \end{pmatrix}^{-1} =
+            \begin{pmatrix}
+                \bm \Lambda_{aa} & \bm \Lambda_{ab} \\
+                \bm \Lambda_{ba} & \bm \Lambda_{bb} 
+            \end{pmatrix} \tag{2.78}
+        \end{align*}
+        Using (2.76), (2.77) and (2.78), we have
+        \begin{align*}
+            \bm\Lambda_{aa} &= (\bm\Sigma_{aa} - \bm\Sigma_{ab}\bm\Sigma_{bb}^{-1}\bm\Sigma_{ba})^{-1} \tag{2.79} \\
+            \bm\Lambda_{ab} &= -(\bm\Sigma_{aa} - \bm\Sigma_{ab}\bm\Sigma_{bb}^{-1}\bm\Sigma_{ba})^{-1}\bm\Sigma_{ab}\bm\Sigma_{bb}^{-1} \tag{2.80} 
+        \end{align*}
+        and \vspace{-5mm}
+        \begin{align*}
+            \bm\mu_{a|b} &= \bm\mu_a + \bm\Sigma_{ab}\bm\Sigma_{bb}^{-1}(\mathbf x_b - \bm\mu_b) \tag{2.81} \\
+            \bm\Sigma_{a|b} &= \bm\Sigma_{aa} - \bm\Sigma_{ab}\bm\Sigma_{bb}^{-1}\bm\Sigma_{ba} \tag{2.82}
+        \end{align*}
     \end{frame}
+
+    \begin{supframe}{Solution of Exercise 2.24}
     
-    \begin{frame}{Title}
-        \begin{block}{Closed form of conditional Gaussian distribution}
-            \begin{align*}
-                &p(\mathbf x_a | \mathbf x_b) = \mathcal N(\mathbf x_a | \bm \mu_{a|b}, \bm \Sigma_{a|b})  \\
-                &\bm\mu_{a|b} = \bm\mu_a - \bm\Sigma_{ab}\bm\Sigma_{bb}^{-1}(\mathbf x_b - \bm\mu_b) \tag{2.81}\\
-                &\bm\Sigma_{a|b} = \bm\Sigma_{aa}-\bm\Sigma_{ab}\bm\Sigma_{bb}^{-1}\bm\Sigma_{ba} \tag{2.82}
-            \end{align*}
-        \end{block}
-    \end{frame}
+    \end{supframe}
     
     \section{\S2.3.2 Marginal Gaussian Distribution}
     
