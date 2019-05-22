@@ -379,12 +379,21 @@
     \section{\S2.3.2 Marginal Gaussian Distribution}
     
     \begin{frame}{Derivation of Marginal Gaussian Distribution}
+        \begin{block}{Marginal Gaussian Distribution}
+            \[
+                p(\mathbf x_a, \mathbf x_b) = \mathcal N(\mathbf x | \bm\mu, \bm\Sigma)
+                \Rightarrow p(\mathbf x_a) = \mathcal N(\mathbf x_a | \bm \mu_a, \bm \Sigma_a) 
+            \]
+        \end{block}
         \begin{align*}
             p(\mathbf x_a) &= \int p(\mathbf x_a, \mathbf x_b) \:\mathrm d\mathbf x_b \tag{2.83}\\
             &= \int \frac{1}{(2\pi)^{D/2}|\bm\Sigma|^{1/2}}\exp\left\{ -\frac{1}{2}(\mathbf x - \bm\mu)^\top \bm\Sigma^{-1}(\mathbf x - \bm\mu) \right\} \:\mathrm d\mathbf x_b \\
             &= \int \mathrm{const.} \cdot \exp(\redtext{\mbox{The terms involving $\mathbf x_b$}}) \cdot \exp(\bluetext{\mbox{Other terms}}) \:\mathrm d\mathbf x_b \\
             &= \mathrm{const.}\cdot \exp(\bluetext{\mbox{Other terms}}) \int \exp(\redtext{\mbox{The terms involving $\mathbf x_b$}}) \:\mathrm d\mathbf x_b
         \end{align*}
+        \note{
+            定義に従おう
+        }
     \end{frame}
     
     \begin{frame}{Derivation of Marginal Gaussian Distribution}
