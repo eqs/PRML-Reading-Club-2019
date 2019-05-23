@@ -552,45 +552,75 @@
         \end{align*}
         Marginal distribution:
         \begin{align*}
-            p(\mathbf x_a | \mathbf x_b) &= \mathcal N(\mathbf x_a | \bm\mu_a, \bm\Sigma_{aa}) \tag{2.98}
+            p(\mathbf x_a) &= \mathcal N(\mathbf x_a | \bm\mu_a, \bm\Sigma_{aa}) \tag{2.98}
         \end{align*}
     \end{frame}
     
     \section{\S2.3.3 Bayes' theorem for Gaussian variables}
     
-    \begin{frame}{Linear Gaussian Model}
-        \begin{align*}
-            p(\mathbf x) &= \mathcal N(\mathbf x | \bm\mu, \bm\Lambda^{-1}) \tag{2.99} \\
-            p(\mathbf x | \mathbf y) &= \mathcal N(\mathbf y | \mathbf A\mathbf x + \mathbf b, \mathbf L^{-1}) \tag{2.100} \\
-        \end{align*}
+    \begin{frame}{Problem: find an expression for the conditional distribution}
+        \begin{itemize}
+            \item Here, we shall suppose that we are given:
+                \begin{align*}
+                    p(\mathbf x) &= \mathcal N(\mathbf x | \bm\mu, \bm\Lambda^{-1}) \tag{2.99} \\
+                    p(\mathbf y | \mathbf x) &= \mathcal N(\mathbf y | \mathbf A\mathbf x + \mathbf b, \mathbf L^{-1}) \tag{2.100} \\
+                    \mathbf z &= \begin{pmatrix}
+                        \mathbf x \\ \mathbf y
+                    \end{pmatrix} \tag{2.101}
+                \end{align*}
+                \vspace{-5mm}
+                \begin{itemize}
+                    \item Variables: $\mathbf x \in \mathbb R^M$ and $\mathbf y \in \mathbb R^D$
+                    \item Params governing the means: $\bm\mu \in \mathbb R^M$, $\mathbf A \in \mathbb R^{M\times D}$ and $\mathbf b \in \mathbb R^D$
+                    \item Precision matrices: $\bm\Lambda \in \mathbb R^{M\times M}$ and $\mathbf L \in \mathbb R^{D\times D}$
+                \end{itemize}
+            \item We wish find an expression for
+                \begin{itemize}
+                    \item The joint distribution $p(\mathbf x, \mathbf y) = p(\mathbf z)$
+                    \item The marginal distribution $p(\mathbf y)$
+                    \item The conditional distribution $p(\mathbf x | \mathbf y)$
+                \end{itemize}
+        \end{itemize}
     \end{frame}
-    
-    \begin{frame}{Title}
-        \begin{align*}
-            \mathbf z &= \begin{pmatrix}
-                \mathbf x \\ \mathbf y
-            \end{pmatrix} \tag{2.101}
-        \end{align*}
+
+    \begin{frame}{Why we want to find the conditional dist $p(\mathbf x | \mathbf y)$?}
+        \begin{itemize}
+            \item Recall:
+                \begin{align*}
+                    p(\mathbf x) &= \mathcal N(\mathbf x | \bm\mu, \bm\Lambda^{-1}) \tag{2.99} \\
+                    p(\mathbf y | \mathbf x) &= \mathcal N(\mathbf y | \mathbf A\mathbf x + \mathbf b, \mathbf L^{-1}) \tag{2.100}
+                \end{align*}
+            \item We can interpret
+                \begin{itemize}
+                    \item $p(\mathbf x)$ as a prior over $\mathbf x$
+                    \item $p(\mathbf y | \mathbf x)$ as a likelihood of $\mathbf y$
+                \end{itemize}
+            \item If $\mathbf y$ is observed, then $p(\mathbf x | \mathbf y)$ represents the corresponding posterior over $\mathbf x$
+                given by Bayes' theorem:
+                \begin{align*}
+                    p(\mathbf x | \mathbf y) = \frac{p(\mathbf y| \mathbf x)}{p(\mathbf y)}p(\mathbf x)
+                \end{align*}
+        \end{itemize}
     \end{frame}
     
     \begin{frame}{Derivation of Joint Distribution $p(\mathbf z)$}
         From the product rule of probability, 
         \begin{align*}
             p(\mathbf z) = 
-            \highlightcap[blue]{p(\mathbf x, \mathbf y)}{Unknown}
-            = \highlightcap[red]{p(\mathbf y | \mathbf x)}{Known} \times \highlightcap[red]{p(\mathbf x)}{Known}
+            \highlightcap<2->[blue]{p(\mathbf x, \mathbf y)}{Unknown}
+            = \highlightcap<2->[red]{p(\mathbf y | \mathbf x)}{Known} \times \highlightcap<2->[red]{p(\mathbf x)}{Known}
         \end{align*}
-        Take logarithm of both sides, 
+        \onslide<3->{Take the logarithm of the joint distribution, 
         \begin{align*}
             \ln p(\mathbf z) 
             &= \ln p(\mathbf x) + \ln p(\mathbf y | \mathbf x) \\
             &= -\frac{1}{2}(\mathbf x - \bm\mu)^\top\bm\Lambda(\mathbf x - \bm\mu) \\
             &\quad -\frac{1}{2}(\mathbf y - \mathbf A\mathbf x - \mathbf b)^\top\mathbf L(\mathbf y - \mathbf A\mathbf x - \mathbf b)
                 + \mathrm{const.} \tag{2.102}
-        \end{align*}
-        Where, (2.102) is a quadratic function of $\mathbf x$ and $\mathbf y$. \par
+        \end{align*}}
+        \onslide<4->{Where, (2.102) is a quadratic function of $\mathbf x$ and $\mathbf y$. \par
         $\Rightarrow$ $p(\mathbf z)$ is Gaussian distribuiton. \par
-        $\Rightarrow$ Completing the square!
+        $\Rightarrow$ Completing the square!}
     \end{frame}
     
     \begin{frame}{Derivation of Joint Distribution $p(\mathbf z)$}
@@ -635,11 +665,141 @@
             \end{pmatrix}}{$\mathbf R$ (Precision mat)}
             \begin{pmatrix}\mathbf x\\ \mathbf y\end{pmatrix}
             + \begin{pmatrix}\mathbf x\\ \mathbf y\end{pmatrix}^\top
-                \highlightcap[green]{\begin{pmatrix}\bm\Lambda\bm\mu - \mathbf A^\top\mathbf L\mathbf b \\ \mathbf L\mathbf b\end{pmatrix}}{$\mathbf m$ (mean vec)} \\
+                \highlightcap[green]{\begin{pmatrix}\bm\Lambda\bm\mu - \mathbf A^\top\mathbf L\mathbf b \\ \mathbf L\mathbf b\end{pmatrix}}{$\mathbf m$} \\
             & \quad + \mathrm{const.} \\
             &= \mathbf z^\top\mathbf R\mathbf z + \mathbf z^\top \mathbf m + \mathrm{const.} \\
-            &= \mathbf z^\top\mathbf R\mathbf z + \mathbf z^\top \mathbf R \mathbf R^{-1} \mathbf m + \mathrm{const.} \Longrightarrow \mbox{Completing the square!}
+            &= (\mathbf z - \mathbf R^{-1}\mathbf m)^\top\mathbf R(\mathbf z - \mathbf R^{-1}\mathbf m) + \mathrm{const.}
         \end{align*}
+    \end{frame}
+
+    \begin{frame}{Derivation of Joint Distribution $p(\mathbf z)$}
+        \begin{itemize}
+            \item Recall:
+                \begin{align*}
+                    \ln p(\mathbf z) &= \ln p(\mathbf x) + \ln p(\mathbf y | \mathbf x) \tag{2.102'}\\
+                    &= (\mathbf z - \mathbf R^{-1}\mathbf m)^\top\mathbf R(\mathbf z - \mathbf R^{-1}\mathbf m) + \mathrm{const.} \\
+                    \mathbf R &= \begin{pmatrix}
+                    \bm\Lambda + \mathbf A^\top\mathbf L\mathbf A & -\mathbf A^\top\mathbf L \\
+                    -\mathbf L\mathbf A& \mathbf L
+                    \end{pmatrix}\tag{2.104} \\
+                    \mathbf m &= \begin{pmatrix}\bm\Lambda\bm\mu - \mathbf A^\top\mathbf L\mathbf b \\ \mathbf L\mathbf b\end{pmatrix}
+                \end{align*}
+            \item Because $p(\mathbf z)$ is Gaussian, we have \\
+                (derivation of (2.105) and (2.108) is Exercise 2.29 and 2.30, respectively))
+                \begin{align*}
+                    \mathrm{cov}[\mathbf z] &= \mathbf R^{-1}
+                    = \begin{pmatrix}
+                        \bm\Lambda^{-1} & \bm\Lambda^{-1}\mathbf A^\top \\
+                        \mathbf A\bm\Lambda^{-1} & \mathbf L^{-1} + \mathbf A\bm\Lambda^{-1}\mathbf A^\top
+                    \end{pmatrix}\tag{2.105} \\
+                    \mathbb E[\mathbf z] &= \mathbf R^{-1}\mathbf m
+                    = \begin{pmatrix}
+                        \bm\mu \\ \mathbf A\bm\mu + \mathbf b
+                    \end{pmatrix} \tag{2.108}
+                \end{align*}
+        \end{itemize}
+        \note{
+            今，$\mathbf x$と$\mathbf y$の同時分布の形を求めることを考えていました．
+            ここまでの議論で同時分布の対数が$\mathbf z$に関する二次形式になってることを示しました．
+        }
+    \end{frame}
+
+    \begin{supframe}{Solution of Exercise 2.29}
+
+    \end{supframe}
+    
+    \begin{supframe}{Solution of Exercise 2.30}
+
+    \end{supframe}
+
+    \begin{frame}{Derivation of Marginal Distribution $p(\mathbf y)$}
+        \begin{itemize}
+            \item From the definition of marginal distribution, 
+                \begin{align*}
+                    \highlightcap<2->[blue]{p(\mathbf y)}{Unknown} = \int \highlightcap<2->[red]{p(\mathbf z)}{Known} \:\mathrm d\mathbf x
+                \end{align*}
+            \item<3-> Recall the marginal distribution of a partitioned Gaussian:
+                \begin{align*}
+                    p(\mathbf x_a) = \int p(\mathbf x_a, \mathbf x_b) \:\mathrm d\mathbf x 
+                    = \mathcal N(\mathbf x_a | \bm\mu_a, \bm\Sigma_{aa}) \tag{2.98}
+                \end{align*}
+            \item<4-> The mean and covariance of $p(\mathbf z)$:
+                \begin{align*}
+                    \mathbb E\rbracket{\mathbf z} = \mathbb E\rbracket{\begin{pmatrix}\mathbf x \\ \mathbf y\end{pmatrix}} &= 
+                    \begin{pmatrix}
+                        \bm\mu \\ \highlight<5->[green]{\mathbf A\bm\mu + \mathbf b}
+                    \end{pmatrix} \tag{2.108} \\
+                    \mathrm{cov}\rbracket{\mathbf z} = \mathrm{cov}\rbracket{\begin{pmatrix}\mathbf x \\ \mathbf y\end{pmatrix}} &= 
+                    \begin{pmatrix}
+                        \bm\Lambda^{-1} & \bm\Lambda^{-1}\mathbf A^\top \\
+                        \mathbf A\bm\Lambda^{-1} & \highlight<5->[green]{\mathbf L^{-1} + \mathbf A\bm\Lambda^{-1}\mathbf A^\top}
+                    \end{pmatrix}\tag{2.105} \\
+                    \onslide{\therefore\;\;\;\;\mathbb E[\mathbf y] &= \mathbf A\bm\mu + \mathbf b \tag{2.109} \\}
+                    \onslide{\mathrm{cov}[\mathbf y] &= \mathbf L^{-1} + \mathbf A\bm\Lambda^{-1}\mathbf A^\top \tag{2.110}}
+                \end{align*}
+        \end{itemize}
+        \note{
+            定義に従おう
+        }
+    \end{frame}
+    
+    \begin{frame}{Derivation of Conditional Distribution $p(\mathbf x | \mathbf y)$}
+        \begin{itemize}
+            \item From the definition of conditional distribution, 
+                \begin{align*}
+                    \highlightcaphead<2->[blue]{p(\mathbf x | \mathbf y)}{Unknown}
+                    = \frac{\highlightcaphead<2->[red]{p(\mathbf z)}{Known}}{p(\mathbf y)}
+                \end{align*}
+            \item<3-> Recall the conditional distribution of a partitioned Gaussian:
+                \begin{align*}
+                    p(\mathbf x_a | \mathbf x_b) &= \mathcal N(\mathbf x_a | \bm\mu_{a|b}, \bm\Lambda_{aa}^{-1}) \tag{2.96} \\
+                    \bm\mu_{a|b} &= \bm\mu_a - \bm\Lambda_{aa}^{-1}\bm\Lambda_{ab}(\mathbf x_b - \bm\mu_b) \tag{2.97}
+                \end{align*}
+            \item<4-> The mean and \textit{precision} of $p(\mathbf z)$:
+                \begin{align*}
+                    \mathbb E\rbracket{\mathbf z} &= 
+                    \begin{pmatrix}
+                        \bm\mu \\ \mathbf A\bm\mu + \mathbf b
+                    \end{pmatrix} \tag{2.108} \\
+                    \mathbf R &= \begin{pmatrix}
+                    \bm\Lambda + \mathbf A^\top\mathbf L\mathbf A & -\mathbf A^\top\mathbf L \\
+                    -\mathbf L\mathbf A& \mathbf L
+                    \end{pmatrix}\tag{2.104} \\
+                    \onslide<5->{
+                        \therefore\;\;\;\;\mathbb E[\mathbf x|\mathbf y]
+                            &= (\bm\Lambda + \mathbf A^\top\mathbf L\mathbf A)^{-1}
+                                \cbracket{\mathbf A^\top\mathbf L(\mathbf y - \mathbf b) + \bm\Lambda\bm\mu} \tag{2.111} \\
+                    }
+                    \onslide<5->{
+                        \mathrm{cov}[\mathbf x | \mathbf y]
+                            &=  (\bm\Lambda + \mathbf A^\top\mathbf L\mathbf A)^{-1} \tag{2.112}
+                    }
+                \end{align*}
+        \end{itemize}
+    \end{frame}
+    
+    \begin{frame}{Marginal and Conditional Gaussians}
+        \begin{itemize}
+            \item Given following distributions:
+                \begin{align*}
+                    p(\mathbf x) &= \mathcal N(\mathbf x | \bm\mu, \bm\Lambda^{-1}) \tag{2.113} \\
+                    p(\mathbf y | \mathbf x) &= \mathcal N(\mathbf y | \mathbf A\mathbf x + \mathbf b, \mathbf L^{-1}) \tag{2.114}
+                \end{align*}
+            \item The marginal distribution of $\mathbf y$:
+                \begin{align*}
+                    p(\mathbf y) &= \mathcal N(\mathbf y | \mathbf A\bm\mu + \mathbf b, \mathbf L^{-1}+\mathbf A\bm\Lambda^{-1}\mathbf A^\top)
+                    \tag{2.115}
+                \end{align*}
+            \item The conditional distribution of $\mathbf x$ given $\mathbf y$:
+                \begin{align*}
+                    p(\mathbf x | \mathbf y) &= \mathcal N(\mathbf x | \bm\Sigma\cbracket{\mathbf A^\top\mathbf L(\mathbf y - \mathbf b) + \bm\Lambda\bm\mu}, \bm\Sigma)
+                    \tag{2.116}
+                \end{align*}
+                where
+                \begin{align*}
+                    \bm\Sigma = (\bm\Lambda + \mathbf A^\top\mathbf L\mathbf A)^{-1} \tag{2.117}
+                \end{align*}
+        \end{itemize}
     \end{frame}
     
     \section{\S2.3.4 Maximum likelihood for the Gaussian}
