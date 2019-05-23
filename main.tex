@@ -393,6 +393,9 @@
         \end{align*}
         \note{
             定義に従おう
+
+            条件付き分布のときの議論から，指数部分が$\mathbf x_b$についての2次形式であることは明らかである．
+            計算の方針は，指数部分を$\mathbf x_b$を含む項とそれ以外にわけて，積分の計算を簡単にする．
         }
     \end{frame}
     
@@ -463,40 +466,94 @@
             &\Rightarrow
             \begin{cases}
                 \mathbb E[\mathbf x_a] = \bm\mu_a \\
-                \mathrm{cov}[\mathbf x_a] = (\bm\Lambda_{aa} - \bm\Lambda_{ab}\bm\Lambda_{bb}^{-1}\bm\Lambda_{ba})^{-1}
-            \end{cases}
+                \mathrm{cov}[\mathbf x_a] = (\bm\Lambda_{aa} - \bm\Lambda_{ab}\bm\Lambda_{bb}^{-1}\bm\Lambda_{ba})^{-1} 
+            \end{cases} \tag{2.92 and 2.88}
         \end{align*}
     \end{frame}
     
-    \begin{frame}{Derivation of Marginal Gaussian Distribution}
-    
-    \end{frame}
-    
-    \begin{frame}{Derivation of Marginal Gaussian Distribution}
-    
-    \end{frame}
-    
-    \begin{frame}{Title}
-        \begin{align*}
-            p(\mathbf x_a) = \int p(\mathbf x_a, \mathbf x_b)\; \mathrm d\mathbf x_b
-        \end{align*}
-        Hello metropolis!
-    \end{frame}
-    \begin{frame}{Linear Gaussian Model}
-        \begin{align*}
-            \mathbf y = \mathbf A \mathbf x + \mathbf b + \bm \epsilon, \;\; \bm \epsilon \sim \mathcal N(\bm\epsilon\:|\: \mathbf 0, \mathbf L^{-1})
-        \end{align*}
-    \end{frame}
-    \begin{frame}{Title}
-        Hello metropolis!
-    \end{frame}
-    \begin{frame}{Title}
-        Hello metropolis!
-    \end{frame}
-    \begin{frame}{Student's t-distribution}
+    \begin{frame}{Express the results in terms of the covariance matrix}
         \begin{itemize}
-            \item Motivation: Marginalize precision of Gaussin distribution
+            \item Recall:
+                \begin{align*}
+                    p(\mathbf x_a) &= \mathcal N(\mathbf x_a | \mathbb E[\mathbf x_a], \mathrm{cov}[\mathbf x_a]) \\
+                    \mathbb E[\mathbf x_a] &= \bm\mu_a \tag{2.92}\\
+                    \mathrm{cov}[\mathbf x_a] &= (\bm\Lambda_{aa} - \bm\Lambda_{ab}\bm\Lambda_{bb}^{-1}\bm\Lambda_{ba})^{-1} \tag{2.88}
+                \end{align*}
+            \item The results are expressed in terms of the partitioned precision matrix.
+            \item We can also express these results in terms of the corresponding partitioned covariance matrix.
+                \begin{align*}
+                    \begin{pmatrix}
+                        \bm \Sigma_{aa} & \bm \Sigma_{ab} \\
+                        \bm \Sigma_{ba} & \bm \Sigma_{bb} 
+                    \end{pmatrix}^{-1} =
+                    \begin{pmatrix}
+                        \bm \Lambda_{aa} & \bm \Lambda_{ab} \\
+                        \bm \Lambda_{ba} & \bm \Lambda_{bb} 
+                    \end{pmatrix} \tag{2.90}
+                \end{align*}
         \end{itemize}
+        \note{
+            ここまでの議論で導かれた結果は精度行列の言葉で表現したものです．
+            一方，我々はこれを元の共分散行列の言葉でも表現することが可能です．
+        }
+    \end{frame}
+
+    \begin{frame}{Express the results in terms of the covariance matrix}
+        \begin{block}{The identity for the inverse of a partitioned matrix (Exercise 2.24)}
+            \begin{align*}
+                \begin{pmatrix}
+                    \mathbf A & \mathbf B \\
+                    \mathbf C & \mathbf D
+                \end{pmatrix}^{-1} &= 
+                \begin{pmatrix}
+                    \mathbf M & -\mathbf M\mathbf B\mathbf D^{-1} \\
+                    -\mathbf D^{-1}\mathbf C\mathbf M & \mathbf D^{-1}+\mathbf D^{-1}\mathbf C\mathbf M \mathbf B \mathbf D^{-1}
+                \end{pmatrix} \tag{2.76}\\
+                \mathbf M &= (\mathbf A - \mathbf B\mathbf D^{-1}\mathbf C)^{-1} \tag{2.77}
+            \end{align*}
+        \end{block}
+        \vspace{-0.5cm}
+        \begin{align*}
+            \mathrm{cov}[\mathbf x_a] &= (\bm\Lambda_{aa} - \bm\Lambda_{ab}\bm\Lambda_{bb}^{-1}\bm\Lambda_{ba})^{-1} \tag{2.88} \\
+            \begin{pmatrix}
+                \bm \Lambda_{aa} & \bm \Lambda_{ab} \\
+                \bm \Lambda_{ba} & \bm \Lambda_{bb} 
+            \end{pmatrix}^{-1}
+             &= \begin{pmatrix}
+                \bm \Sigma_{aa} & \bm \Sigma_{ab} \\
+                \bm \Sigma_{ba} & \bm \Sigma_{bb} 
+            \end{pmatrix} \tag{2.90} 
+        \end{align*}
+        Using (2.88) and (2.90), we obtain
+        \begin{align*}
+            \mathbb E[\mathbf x_a] &= \bm\mu_a \tag{2.92}\\
+            \mathrm{cov}[\mathbf x_a] &= \bm\Sigma_{aa} \tag{2.93}
+        \end{align*}
+    \end{frame}
+
+    \begin{frame}{Partitioned Gaussians}
+        Given a joint Gaussian distribution $p(\mathbf x) = \mathcal N(\mathbf x | \bm\mu, \bm\Sigma)$ with $\bm\Lambda \equiv \bm\Sigma^{-1}$ and
+        \begin{align*}
+            \mathbf x = \begin{pmatrix} \mathbf x_a \\ \mathbf x_b \end{pmatrix},\quad
+            &\bm\mu = \begin{pmatrix} \bm\mu_a \\ \bm\mu_b \end{pmatrix} \tag{2.94} \\
+            \bm\Sigma = \begin{pmatrix}
+                \bm \Sigma_{aa} & \bm \Sigma_{ab} \\
+                \bm \Sigma_{ba} & \bm \Sigma_{bb} 
+            \end{pmatrix},\quad
+            &\bm\Lambda = \begin{pmatrix}
+                \bm \Lambda_{aa} & \bm \Lambda_{ab} \\
+                \bm \Lambda_{ba} & \bm \Lambda_{bb} 
+            \end{pmatrix} \tag{2.95}
+        \end{align*}
+        Conditional distribution:
+        \begin{align*}
+            p(\mathbf x_a | \mathbf x_b) &= \mathcal N(\mathbf x_a | \bm\mu_{a|b}, \bm\Lambda_{aa}^{-1}) \tag{2.96} \\
+            \bm\mu_{a|b} &= \bm\mu_a - \bm\Lambda_{aa}^{-1}\bm\Lambda_{ab}(\mathbf x_b - \bm\mu_b) \tag{2.97}
+        \end{align*}
+        Marginal distribution:
+        \begin{align*}
+            p(\mathbf x_a | \mathbf x_b) &= \mathcal N(\mathbf x_a | \bm\mu_a, \bm\Sigma_{aa}) \tag{2.98}
+        \end{align*}
     \end{frame}
     
     \section{\S2.3.3 Bayes' theorem for Gaussian variables}
