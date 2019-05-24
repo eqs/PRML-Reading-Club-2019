@@ -67,6 +67,17 @@
     }%
 }
 
+\newcommand<>{\highlightcapright}[3][yellow]{%
+    \alt#4{%
+        \tikz[baseline=(x.base)]{
+            \node[rectangle,rounded corners,fill=#1!10](x){$#2$};
+            \node[anchor=west, color=#1, align=center] at (x.east) {#3};
+        }%
+    }{%
+        #2
+    }%
+}
+
 \newenvironment{supframe}[1]{%
     \setbeamercolor{frametitle}{fg=white!90!purple, bg=mLightGreen!75!black}%
     \begin{frame}{#1}%
@@ -106,12 +117,14 @@
                     \item \S2.3.5 Sequential estimation
                     \item \S2.3.6 Bayesian inference for the Gaussian
                 \end{itemize}
-            \item Students's t-distribution
+            \item Student's t-distribution
                 \begin{itemize}
                     \item \S2.3.7 Students's t-distribution
                 \end{itemize}
         \end{itemize}
     \end{frame}
+    
+    \section{\S2.3.1 Conditional Gaussian Distribution}
     
     \begin{frame}{Completing the square (for univariate case)}
         \begin{itemize}
@@ -129,8 +142,6 @@
                 \end{align*}
         \end{itemize}
     \end{frame}
-    
-    \section{\S2.3.1 Conditional Gaussian Distribution}
     
     \begin{frame}{Important properties of Gaussian Distribution}
         Now, we consider to derive the following properties:
@@ -306,6 +317,10 @@
             \bm\Sigma_{a|b} &= \bm\Lambda_{aa}^{-1} \tag{2.73}\\
             \bm\mu_{a|b} &= \bm\mu_a - \bm\Lambda_{aa}^{-1}\bm\Lambda_{ab}(\mathbf x_b - \bm\mu_b) \tag{2.75}
         \end{align*}
+        \begin{itemize}
+            \item $\bm\mu_{a|b}$ is a linear function of $\mathbf x_b$.
+            \item $\bm\Sigma_{a|b}$ is independent of $\mathbf x_b$.
+        \end{itemize}
     \end{frame}
 
     \begin{frame}{Express the results in terms of the covariance matrix}
@@ -803,6 +818,27 @@
     \end{frame}
     
     \section{\S2.3.4 Maximum likelihood for the Gaussian}
+    
+    \begin{frame}{Table of Contents}
+        \begin{itemize}
+            \item Important properties of Gaussian distributions
+                \begin{itemize}
+                    \item \S2.3.1 Conditional Gaussian Distribution
+                    \item \S2.3.2 Marginal Gaussian Distribution
+                    \item \S2.3.3 Bayes' theorem for Gaussian variables
+                \end{itemize}
+            \item Parameter estimation for the Gaussian
+                \begin{itemize}
+                    \item \S2.3.4 Maximum likelihood for the Gaussian
+                    \item \S2.3.5 Sequential estimation
+                    \item \S2.3.6 Bayesian inference for the Gaussian
+                \end{itemize}
+            \item Student's t-distribution
+                \begin{itemize}
+                    \item \S2.3.7 Students's t-distribution
+                \end{itemize}
+        \end{itemize}
+    \end{frame}
 
     \begin{frame}{Maximum likelihood estimation for the Gaussian}
         Maximize the likelihood with regard to $\bm\mu$ and $\bm\Sigma^{-1}$ (i.e. precision $\bm\Lambda$)
@@ -862,25 +898,54 @@
             -\frac{N}{2}\bm\mu^\top\bm\Sigma^{-1}\bm\mu
             \tag{2.118'}
         \end{align*}
-        By setting the derivative of the log-likelihood with respect to $\bm\mu$ and $\bm\Sigma^{-1}$ to zero, like
+        \onslide<2->{By setting the derivative of the log-likelihood with respect to $\bm\mu$ and $\bm\Sigma^{-1}$ to zero, like
         \begin{align*}
             \frac{\partial}{\partial \bm\mu}\ln p(\mathbf X|\bm\mu, \bm\Sigma) = \mathbf 0 \;\;\;\;\;\;\;
             \frac{\partial}{\partial \bm\Sigma^{-1}}\ln p(\mathbf X|\bm\mu, \bm\Sigma) = O 
-        \end{align*}
-        we obtain the solution for ML given by:
+        \end{align*}}
+        \onslide<3->{Then, we obtain the solution for ML given by:
         \begin{align*}
             \bm\mu_\mathrm{ML} &= \frac{1}{N}\abracket{\mathbf x} = \frac{1}{N} \sum_{n=1}^N \mathbf x_n \tag{2.121} \\
             \bm\Sigma_\mathrm{ML} &= \frac{1}{N}\abracket{\mathbf x\mathbf x^\top} - \bm\mu\bm\mu^\top
             = \frac{1}{N} \sum_{n=1}^N (\mathbf x_n - \bm\mu_\mathrm{ML})(\mathbf x_n - \bm\mu_\mathrm{ML})^\top \tag{2.122} \\
-        \end{align*}
+        \end{align*}}
     \end{frame}
 
     \begin{supframe}{Derivation of the ML solution $\bm\mu_\mathrm{ML}$}
-
+        Easy!
     \end{supframe}
     
-    \begin{supframe}{Derivation of the ML solution $\bm\Sigma_\mathrm{ML}$}
+    \begin{supframe}{Derivation of the ML solution $\bm\Sigma_\mathrm{ML}$ (1/2)}
+        The log-likelihood (definition of notation is prev slide):
+        \begin{align*}
+            \ln p(\mathbf X | \bm\mu, \bm\Sigma) = 
+            -\frac{ND}{2}\ln(2\pi) - \frac{N}{2}\ln |\bm\Sigma|
+            -\frac{1}{2}\tr\nbracket{\bm\Sigma^{-1} \abracket{\mathbf x\mathbf x^\top}} \\
+            \quad 
+            + \abracket{\mathbf x}^\top\bm\Sigma^{-1}\bm\mu
+            -\frac{N}{2}\bm\mu^\top\bm\Sigma^{-1}\bm\mu
+            \tag{2.118'}
+        \end{align*}
+        By calculating the derivative of the log-likelihood (2.118') with respect to $\bm\Sigma^{-1}$, we obtain
+        \begin{align*}
+            &\frac{\partial}{\partial\bm\Sigma^{-1}}\ln p(\mathbf X | \bm\mu, \bm\Sigma) \\
+            &= \frac{N}{2}\highlightcap[red]{\bm\Sigma^\top}{$|\bm\Sigma|^{-1} = |\bm\Sigma^{-1}|$ \\ and (C.28)}
+            -\frac{1}{2}\highlightcap[red]{\abracket{\mathbf x\mathbf x^\top}^\top}{(C.24)}
+            +\highlightcap[red]{\nbracket{\bm\mu\abracket{\mathbf x}^\top}^\top}{(C.24)}
+            -\frac{N}{2}\highlightcap[red]{\nbracket{\bm\mu\bm\mu^\top}^\top}{(C.24)} \\
+            &= \frac{N}{2}\bm\Sigma - \frac{1}{2}\abracket{\mathbf x\mathbf x^\top}
+            \abracket{\mathbf x}\bm\mu^\top - \frac{N}{2}\bm\mu\bm\mu^\top
+        \end{align*}
+    \end{supframe}
 
+    \begin{supframe}{Derivation of the ML solution $\bm\Sigma_\mathrm{ML}$ (2/2)}
+        By setting $\displaystyle\frac{\partial}{\partial\bm\Sigma^{-1}}\ln p(\mathbf X | \bm\mu, \bm\Sigma)$ to zero
+        and solving it in terms of $\bm\Sigma$, we have
+        \begin{align*}
+            \bm\Sigma_\mathrm{ML} &= \frac{1}{N} \abracket{\mathbf x\mathbf x^\top}
+            -\highlightcap[red]{\bm\mu_\mathrm{ML}\bm\mu_\mathrm{ML}^\top}{Use $\bm\mu_\mathrm{ML} = \abracket{\mathbf x}/N$} \\
+            &= \frac{1}{N}\sum_{n=1}^N (\mathbf x_n - \bm\mu_\mathrm{ML})(\mathbf x_n - \bm\mu_\mathrm{ML})^\top \tag{2.122}
+        \end{align*}
     \end{supframe}
 
     \begin{frame}{Unbiased estimator}
@@ -968,51 +1033,273 @@
                 \end{align*}
             \item The prior distribution: $p(\mu) = \mathcal N(\mu | \mu_0, \sigma_0^2)$ \hfill (2.138)
             \item By using $p(\mu | \mathbf X) \propto p(\mathbf X | \mu) p(\mu)$ (2.139) and normalizing it, \par, 
-                we obtain the posterior (derivation: ex. 2.38):
+                we obtain the posterior (derivation: ex.\ 2.38):
                 \begin{align*}
                     p(\mu | \mathbf X) &= \mathcal N(\mu | \mu_N, \sigma_N^2) \tag{2.140} \\
                     \mu_N &= \frac{\sigma^2}{N\sigma_0^2 + \sigma}\mu_0 + \frac{N\sigma_0^2}{N\sigma_0^2 + \sigma}\mu_\mathrm{ML} \tag{2.141} \\
                     \frac{1}{\sigma_N^2} &= \frac{1}{\sigma_0^2} + \frac{N}{\sigma^2} \tag{2.142}
                 \end{align*}
+            \item The solution in $D$-dim Gaussian case is ex.\ 2.40.
         \end{itemize}
     \end{frame}
 
-    \begin{supframe}{Solution of ex. 2.38}
+    \begin{supframe}{Solution of Exercise 2.38}
+
+    \end{supframe}
+    
+    \begin{supframe}{Solution of Exercise 2.40}
 
     \end{supframe}
     
     \begin{frame}{Interpretation of the posterior's params}
-        \begin{itemize}
-            \item Recall:
+        \begin{columns}
+            \begin{column}{0.50\hsize}
                 \begin{align*}
                     p(\mu | \mathbf X) &= \mathcal N(\mu | \mu_N, \sigma_N^2) \tag{2.140} \\
-                    \mu_N &= \frac{\sigma^2}{N\sigma_0^2 + \sigma}\mu_0 + \frac{N\sigma_0^2}{N\sigma_0^2 + \sigma}\mu_\mathrm{ML} \tag{2.141} \\
-                    \frac{1}{\sigma_N^2} &= \frac{1}{\sigma_0^2} + \frac{N}{\sigma^2} \tag{2.142}
+                    \mu_N &= \highlightcap<2->[red]{\displaystyle\frac{\sigma^2}{N\sigma_0^2 + \sigma}\mu_0 + \frac{N\sigma_0^2}{N\sigma_0^2 + \sigma}\mu_\mathrm{ML}}{\small $\mu_N$ intervene between $\mu_0$ and $\mu_\mathrm{ML}$} \tag{2.141} \\
+                    \frac{1}{\sigma_N^2} &= \highlightcapright<2->[red]{\displaystyle\frac{1}{\sigma_0^2} + \frac{N}{\sigma^2}}{\small Monotone function of $N$} \tag{2.142}
                 \end{align*}
+            \end{column}
+            \begin{column}{0.45\hsize}
+                \begin{figure}[h]\centering
+                    \includegraphics[width=\hsize]{./figs/Figure2_12.pdf}\\Figure 2.12
+                \end{figure}
+            \end{column}
+        \end{columns}
+        \begin{itemize}
+            \item If we have no observations ($N = 0$), the posterior mean $\mu_N = \mu_0$.
+            \item $N \to \infty$ $\Rightarrow$ $\mu_N \to \mu_\mathrm{ML}$ and $\sigma_N^2 \to 0$.
+            \item $\sigma_0^2 \to \infty$ (i.e. no prior) $\Rightarrow$ $\mu_N \to \mu_\mathrm{ML}$ and $\sigma_N^2 \to \sigma^2/N$.
         \end{itemize}
     \end{frame}
     
-    \begin{frame}{Sequential estimation with the Bayesian paradigm}
+    \begin{frame}{The Bayesian paradigm naturally leads to a sequential view of the inference problem.}
         \begin{align*}
             p(\mu | \mathbf X) &\propto p(\mu)\prod_{n=1}^{N}p(x_n | \mu) \\
             &= \highlightcap<2->[red]{\displaystyle\rbracket{p(\mu)\prod_{n=1}^{N-1}p(x_n | \mu)}}{The posterior after \\ observing $N-1$ data}
             \highlightcap<2->[blue]{p(x_N | \mu)}{The likelihood \\ with $N$-th data} \tag{2.144}
         \end{align*}
-        \vspace{-7.5mm}
-        \begin{figure}[h]\centering
-            \includegraphics[height=4.0cm]{./figs/Figure2_12.pdf}\hspace{1em}Figure 2.12
-        \end{figure}
+        \begin{itemize}
+            \item<3-> The posterior after observing $N-1$ data can be viewed as a prior to arriving a posterior after observing $N$-th data.
+            \item<3-> The sequential view is very general and applies to any problem in which the observed data are assumed to be i.i.d.
+        \end{itemize}
     \end{frame}
     
-    \begin{frame}{The task of inferring the precision $\lambda$ (the mean $\mu$ is known)}
+    \begin{frame}{The task of inferring the precision $\lambda \equiv 1/\sigma^2$ (the mean $\mu$ is known)}
+        \begin{itemize}
+            \item A set of $N$ observations: $\mathbf X = \cbracket{x_1, \cdots, x_N}$
+            \item The likelihood function (the prob. of the observed data given $\lambda$):
+                \begin{align*}
+                    p(\mathbf X | \lambda) &= \prod_{n=1}^N p(x_n | \lambda) \\
+                    &\propto \highlightcap[red]<2->{\lambda^{N/2}}{a power of $\lambda$}\highlightcap<2->[red]{\displaystyle\exp\cbracket{-\frac{\lambda}{2}\sum_{n=1}^N (x_n - \mu)^2}}{the exp of a linear function of $\lambda$} \tag{2.145}
+                \end{align*}
+            \item The corresponding prior $p(\lambda)$ should be proportional to (2.145).
+            \item<3-> We therefore take our prior to be the \textit{gamma distribution}:
+                \begin{align*}
+                    \mathrm{Gam}(\lambda | a, b) = \frac{1}{\Gamma(a)}b^a\lambda^{a-1}\exp(-b\lambda) \tag{2.146}
+                \end{align*}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{The gamma distribution}
+        \begin{align*}
+            \mathrm{Gam}(\lambda | a, b) &= \frac{1}{\Gamma(a)}b^a\lambda^{a-1}\exp(-b\lambda) \tag{2.146} \\
+            \mathbb E[\lambda] &= \frac{a}{b} \tag{2.147} \\
+            \mathrm{var}[\lambda] &= \frac{a}{b^2} \tag{2.148}
+        \end{align*}
+        \begin{figure}[h]\centering
+            \includegraphics[width=0.3\hsize]{./figs/Figure2_13a.pdf}
+            \includegraphics[width=0.3\hsize]{./figs/Figure2_13b.pdf}
+            \includegraphics[width=0.3\hsize]{./figs/Figure2_13c.pdf}
+        \end{figure}\vspace{-5mm}
+        \begin{itemize}
+            \item (2.146) is correctly normalized by $\Gamma(a)$ (ex.\ 2.41).
+            \item If $a > 0$, the distribution has a finite integral.
+            \item If $a \geqslant 1$, the distribution itself is finite.
+            \item Derivation of (2.147) and (2.148): ex.\ (2.42)
+        \end{itemize}
+    \end{frame}
+
+    \begin{supframe}{Solution of Exercise 2.41}
+        Easy!
+    \end{supframe}
+    
+    \begin{supframe}{Solution of Exercise 2.42}
+        Easy!
+    \end{supframe}
+
+    \begin{frame}{The task of inferring the precision $\lambda \equiv 1/\sigma^2$ (the mean $\mu$ is known)}
+        \begin{itemize}
+            \item The likelihood:
+                \begin{align*}
+                    p(\mathbf X | \lambda) = \prod_{n=1}^N p(x_n | \lambda) 
+                    \propto \lambda^{N/2}\exp\cbracket{-\frac{\lambda}{2}\sum_{n=1}^N (x_n - \mu)^2} \tag{2.145}
+                \end{align*}
+            \item Consider a prior distribution: $p(\lambda) = \mathrm{Gam}(\lambda | a_0, b_0)$
+            \item If we multiply by the likelihood (2.145), then we obtain a posterior:
+                \begin{align*}
+                    p(\lambda | \mathbf X) 
+                    &\propto \lambda^{a_0 - 1}\lambda^{N/2}\exp\cbracket{-b_0\lambda-\frac{\lambda}{2}\sum_{n=1}^N (x_n - \mu)^2} \tag{2.149} \\
+                    &= \highlightcap<2->[red]{\lambda^{a_0 + N/2 - 1}}{$\lambda^{a-1}$}
+                    \exp\cbracket{\highlightcap<2->[blue]{\displaystyle-\nbracket{b_0+\frac{1}{2}\sum_{n=1}^N (x_n - \mu)^2}\lambda}{$-b\lambda$}}
+                \end{align*}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{The task of inferring the precision $\lambda \equiv 1/\sigma^2$ (the mean $\mu$ is known)}
+        \begin{itemize}
+            \item Therefore, the posterior is
+                \begin{align*}
+                    p(\lambda | \mathbf X) &= \mathrm{Gam}(\lambda | a_N, b_N) \\
+                    a_N &= a_0 + \frac{N}{2} \tag{2.150} \\
+                    b_N &= b_0+\frac{1}{2}\sum_{n=1}^N (x_n - \mu)^2 = b_0 + \frac{N}{2} \sigma_\mathrm{ML}^2\tag{2.151}
+                \end{align*}
+            \item Interpretation of the posterior's params
+                \begin{itemize}
+                    \item From (2.150), we see that observing $N$ data increases $a$ by $N/2$.
+                \end{itemize}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Find a conjugate prior when both the mean and the precision are unknown}
+        To find a conjugate prior $p(\mu, \lambda)$, we consider the dependence of the likelihood on $\mu$ and $\lambda$, 
+        \begin{align*}
+            &p(\mathbf X | \mu, \lambda) = \prod_{n=1}^N \nbracket{\frac{\lambda}{2\pi}}^{1/2}\exp\cbracket{-\frac{\lambda}{2}(x_n - \mu)^2} \\
+            &\propto \rbracket{\lambda^{1/2}\exp\nbracket{-\frac{\lambda\mu^2}{2}}}^N
+                \exp\cbracket{\lambda\mu \sum_{n=1}^N x_n - \frac{\lambda}{2}\sum_{n=1}^Nx_n^2}\tag{2.152}
+        \end{align*}
+        The prior $p(\mu, \lambda)$ that has the same functional dependence on $\mu$ and $\lambda$ as the likelihood
+        and that should therefore take the form:
+        \begin{align*}
+            p(\mu, \lambda)
+            &\propto \rbracket{\lambda^{1/2}\exp\nbracket{-\frac{\lambda\mu^2}{2}}}^\beta
+                \exp\cbracket{c\lambda\mu - d\lambda}\\
+            &= \exp\cbracket{-\frac{\beta\lambda}{2}(\mu - c/\beta)^2}\lambda^{\beta/2}\exp\cbracket{-\nbracket{d - \frac{c^2}{2\beta}}\lambda}
+                \tag{2.153}
+        \end{align*}
+    \end{frame}
+
+    \begin{frame}{Find a conjugate prior when both the mean and the precision are unknown}
+        \begin{itemize}
+            \item Recall we can always write $p(\mu, \lambda) = \highlight<2->[red]{p(\mu | \lambda)}\highlight<2->[blue]{p(\lambda)}$.
+                \begin{align*}
+                    p(\mu, \lambda)
+                    \propto
+                        \highlightcap<2->[red]{\displaystyle\exp\cbracket{-\frac{\beta\lambda}{2}(\mu - c/\beta)^2}}{Gaussian}
+                        \highlightcap<2->[blue]{\displaystyle\lambda^{\beta/2}\exp\cbracket{-\nbracket{d - \frac{c^2}{2\beta}}\lambda}}{gamma distribution} \tag{2.153}
+                \end{align*}
+            \item<3-> By defining new constants $\mu_0 = c/\beta$, $a = (1 + \beta) / 2$ and $b = d - c^2/2\beta$, and normalizing (2.153),
+                we obtain the \textit{normal-gamma} distribution:
+                \begin{align*}
+                    p(\mu, \lambda) = \mathcal N(\mu | \mu_0, (\beta\lambda)^{-1}) \mathrm{Gam}(\lambda | a, b) \tag{2.154}
+                \end{align*}
+            \item<3-> NOTE: This dist is not simply the product of an independent Gaussian prior and a gamma prior.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Summary: conjugate priors in the case of the univariate Gaussian}
+
+    \end{frame}
+
+    \begin{frame}{In the case of the multivariate Gaussian $\mathcal N(\mathbf x | \bm\mu, \bm\Lambda^{-1})$ for a $D$-dim vector $\mathbf x$}
+        \begin{itemize}
+            \item For known mean $\bm\mu$ and unknown precision $\bm\Lambda$, the conjugate prior is a Gaussian:
+                $p(\bm\mu) = \mathcal N(\bm\mu | \bm\mu_0, \bm\Lambda_0^{-1})$
+            \item For unknown mean $\bm\mu$ and known precision $\bm\Lambda$, the conjugate prior is the \textit{Wishart} distribution:
+                \begin{align*}
+                    p(\bm\Lambda) = \mathcal W(\bm\Lambda | \mathbf W, \nu)
+                    = B |\bm\Lambda|^{(\nu - D - 1)/2}\exp\nbracket{-\frac{1}{2}\tr(\mathbf W^{-1}\bm\Lambda)} \tag{2.155}
+                \end{align*}
+                \vspace{-7.5mm}
+                \begin{itemize}
+                    \item $\nu$ is the number of \textit{degrees of freedom}.
+                    \item $\mathbf W \in \mathbb R^{D\times D}$
+                    \item $B$ is a nomalization constant (2.156).
+                \end{itemize}
+            \item For both the mean and the precision are unknown, the conjugate prior is the \textit{normal-Wishart} distribution:
+                \begin{align*}
+                    p(\bm\mu, \bm\Lambda | \bm\mu_0, \beta, \mathbf W, \nu)
+                    = \mathcal N(\bm\mu | \bm\mu_0, (\beta\bm\Lambda)^{-1}) \mathcal W(\bm\Lambda | \mathbf W, \nu) \tag{2.157}
+                \end{align*}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{A conjugate prior over the variance and the covariance}
+        \begin{itemize}
+            \item Instead of working with the precision, we can consider the variance (covariance) itself.
+                The conjugate priors are called:
+                \begin{itemize}
+                    \item the \textit{inverse gamma} distribution (the univariate Gaussian case)
+                    \item the \textit{inverse Wishart} distribution (the multivariate Gaussian case)
+                \end{itemize}
+            \item We shall not discuss this further because we will find it more convenient to work with the precision.
+        \end{itemize}
+    \end{frame}
+
+    \section{\S2.3.7 Student's t-distribution}
+
+    \begin{frame}{Marginalize the precision using a gamma prior}
+        \begin{itemize}
+            \item We have seen that the conj prior for the precision of Gaussian is given by a gamma dist.
+            \item If we have $\mathcal N(x | \mu, \tau^{-1})$ together with a Gamma prior $\mathrm{Gam}(\tau | a, b)$
+                and integrate out the precision, we obtain the marginal dist of $x$:\\
+                (derivation: ex.\ 2.46)
+                \begin{align*}
+                    p(x | \mu, a, b) &= \int p(x, \tau | \mu, a, b) \:\mathrm d\tau \\
+                    &= \int_0^\infty \mathcal N(x | \mu, \tau^{-1}) \mathrm{Gam}(\tau | a, b) \:\mathrm d\tau \tag{2.158} \\
+                    &= \frac{b^a}{\Gamma(a)}\nbracket{\frac{1}{2\pi}}^{1/2}\rbracket{b + \frac{(x - \mu)^2}{2}}^{-a-1/2}\Gamma(a+1/2)
+                \end{align*}
+            \item By convention we define $\nu = 2a$ and $\lambda = a / b$, and obtain the \textit{Student's t-distribution}:
+                \begin{align*}
+                    \mathrm{St}(x | \mu, \lambda, \nu)
+                    = \frac{\Gamma(\nu/2+1/2)}{\Gamma(\nu / 2)} \nbracket{\frac{\lambda}{\pi\nu}}^{1/2}
+                        \rbracket{1 + \frac{\lambda(x-\mu)^2}{\nu}}^{-\nu/2-1/2} \tag{2.159}
+                \end{align*}
+        \end{itemize}
+    \end{frame}
+    
+    \begin{supframe}{Solution of Exercise 2.46}
+        Use $\displaystyle \Gamma(a) = \int_0^\infty t^{a-1}e^{-t} \:\mathrm dt = \int_0^\infty (Au)^{a-1}e^{-Au} A \:\mathrm du$.
+        \begin{align*}
+            &p(x | \mu, a, b) = \int_0^\infty \mathcal N(x | \mu, \tau^{-1}) \mathrm{Gam}(\tau | a, b) \:\mathrm d\tau \tag{2.158} \\
+            &= \int_0^\infty \nbracket{\frac{\tau}{2\pi}}^{\frac{1}{2}}
+                \exp\nbracket{-\frac{\tau}{2}(x - \mu)^2}\cdot\frac{1}{\Gamma(a)}b^a\tau^{a-1}\exp(-b\tau)\:\mathrm d\tau \\
+            &= \frac{b^a}{\Gamma(a)}\nbracket{\frac{1}{2\pi}}^{1/2}
+                \int_0^\infty \tau^{(a+1/2)-1} \exp\cbracket{-\highlightcap[red]{\displaystyle \nbracket{b + \frac{(x-\mu)^2}{2}}}{$\equiv A$}\tau} \:\mathrm d\tau \\
+            &= \frac{b^a}{\Gamma(a)}\nbracket{\frac{1}{2\pi}}^{1/2}\frac{1}{A^{(a+1/2)-1}A}
+                \highlightcap[blue]{\displaystyle\int_0^\infty (A\tau)^{(a+1/2)-1} \exp\cbracket{-\highlight[red]{A}\tau}  A \:\mathrm d\tau}{$\Gamma(a+1/2)$} \\
+            &= \frac{b^a}{\Gamma(a)}\nbracket{\frac{1}{2\pi}}^{1/2}\rbracket{b + \frac{(x - \mu)^2}{2}}^{-a-1/2}\Gamma(a+1/2)
+        \end{align*}
+    \end{supframe}
+
+    \begin{frame}{Student's t-distribution}
+        \begin{align*}
+            \mathrm{St}(x | \mu, \lambda, \nu)
+            = \frac{\Gamma(\nu/2+1/2)}{\Gamma(\nu / 2)} \nbracket{\frac{\lambda}{\pi\nu}}^{1/2}
+                \rbracket{1 + \frac{\lambda(x-\mu)^2}{\nu}}^{-\nu/2-1/2} \tag{2.159}
+        \end{align*}\vspace{-4mm}
+        \begin{itemize}
+            \item $\lambda$: the \textit{precision} of t-distribution \\ (NOTE: it is not  in general equal to the inverse of the variance)
+            \item $\nu$: the \textit{degrees of freedom}
+            \item When $\nu = 1$, it reduces to the \textit{Cauchy} dist.
+            \item When $\nu \to \infty$, it becomes a Gaussian $\mathcal N(x | \mu, \lambda^{-1})$ (ex.\ 2.47).
+        \end{itemize}
+        \begin{figure}[h]\centering
+            \includegraphics[height=3.5cm]{./figs/Figure2_15.pdf}
+        \end{figure}
+    \end{frame}
+
+    \begin{supframe}{Exercise 2.47}
+        Hello metropolis!
+    \end{supframe}
+
+    \begin{frame}{Properties of the t-distribution (1/2): the robustness}
         Hello metropolis!
     \end{frame}
 
     \begin{frame}{Title}
         Hello metropolis!
     \end{frame}
-
-    \section{\S2.3.7 Student's t-distribution}
 
     \begin{frame}{Title}
         Hello metropolis!
