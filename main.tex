@@ -93,7 +93,7 @@
 \DeclareMathOperator{\tr}{tr}
 
 \title{Probability Distributions (PRML \S2.3.1-2.3.7)}
-\date{PRML Reading Club (June 3, 2019)}
+\date{PRML Reading Club (May 31, 2019)}
 \author{Satoshi Murashige}
 \institute{Mathematical Informatics Lab., NAIST}
 
@@ -388,7 +388,7 @@
     \end{frame}
 
     \begin{supframe}{Solution of Exercise 2.24}
-    
+        Multiply both sides
     \end{supframe}
     
     \section{\S2.3.2 Marginal Gaussian Distribution}
@@ -472,7 +472,7 @@
                 + \mathbf x_a^\top\bm\Lambda_{ab}\bm\mu_b + \highlightcap[cyan]{\mathrm{const.}}{\small Independent of $\mathbf x_a$} \\
                 &= -\frac{1}{2}(\mathbf x_a - \bm\mu_a)^\top\bm\Lambda_{aa}(\mathbf x_a - \bm\mu_a) + \mathbf x_a^\top\bm\Lambda_{ab}\bm\mu_b + \highlight[cyan]{\mathrm{const.}} \\
             \frac{1}{2}\mathbf m^\top\bm\Lambda_{bb}^{-1}\mathbf m &= 
-                \frac{1}{2}(\mathbf x_a - \bm\mu_a)\top\bm\Lambda_{ab}\bm\Lambda_{bb}^{-1}\bm\Lambda_{ba}(\mathbf x_a - \bm\mu_a)
+                \frac{1}{2}(\mathbf x_a - \bm\mu_a)^\top\bm\Lambda_{ab}\bm\Lambda_{bb}^{-1}\bm\Lambda_{ba}(\mathbf x_a - \bm\mu_a)
                 - \mathbf x_a^\top\bm\Lambda_{ab}\bm\mu_b + \highlight[cyan]{\mathrm{const.}}
         \end{align*}
         \begin{align*}
@@ -673,17 +673,17 @@
                 +\frac{1}{2} \mathbf y^\top\mathbf L\mathbf A\mathbf x
                 +\frac{1}{2} \mathbf x^\top\mathbf A^\top\mathbf L\mathbf y} \\
             &\qquad + \highlight[blue]{\mathbf x^\top(\bm\Lambda\bm\mu - \mathbf A^\top\mathbf L\mathbf b) + \mathbf y^\top\mathbf L\mathbf b} + \mathrm{const.}\\
-            &= \begin{pmatrix}\mathbf x\\ \mathbf y\end{pmatrix}^\top
+            &= -\frac{1}{2}\begin{pmatrix}\mathbf x\\ \mathbf y\end{pmatrix}^\top
             \highlightcap[green]{\begin{pmatrix}
                 \bm\Lambda + \mathbf A^\top\mathbf L\mathbf A & -\mathbf A^\top\mathbf L \\
                 -\mathbf L\mathbf A& \mathbf L
             \end{pmatrix}}{$\mathbf R$ (Precision mat)}
             \begin{pmatrix}\mathbf x\\ \mathbf y\end{pmatrix}
             + \begin{pmatrix}\mathbf x\\ \mathbf y\end{pmatrix}^\top
-                \highlightcap[green]{\begin{pmatrix}\bm\Lambda\bm\mu - \mathbf A^\top\mathbf L\mathbf b \\ \mathbf L\mathbf b\end{pmatrix}}{$\mathbf m$} \\
+                \highlightcap[green]{\small \begin{pmatrix}\bm\Lambda\bm\mu - \mathbf A^\top\mathbf L\mathbf b \\ \mathbf L\mathbf b\end{pmatrix}}{$\mathbf m$} \\
             & \quad + \mathrm{const.} \\
-            &= \mathbf z^\top\mathbf R\mathbf z + \mathbf z^\top \mathbf m + \mathrm{const.} \\
-            &= (\mathbf z - \mathbf R^{-1}\mathbf m)^\top\mathbf R(\mathbf z - \mathbf R^{-1}\mathbf m) + \mathrm{const.}
+            &= -\frac{1}{2}\mathbf z^\top\mathbf R\mathbf z + \mathbf z^\top \mathbf m + \mathrm{const.} \\
+            &= -\frac{1}{2}(\mathbf z - \mathbf R^{-1}\mathbf m)^\top\mathbf R(\mathbf z - \mathbf R^{-1}\mathbf m) + \mathrm{const.}
         \end{align*}
     \end{frame}
 
@@ -719,13 +719,13 @@
         }
     \end{frame}
 
-    \begin{supframe}{Solution of Exercise 2.29}
+    % \begin{supframe}{Solution of Exercise 2.29}
 
-    \end{supframe}
-    
-    \begin{supframe}{Solution of Exercise 2.30}
+    % \end{supframe}
+    % 
+    % \begin{supframe}{Solution of Exercise 2.30}
 
-    \end{supframe}
+    % \end{supframe}
 
     \begin{frame}{Derivation of Marginal Distribution $p(\mathbf y)$}
         \begin{itemize}
@@ -966,29 +966,120 @@
 
     \end{supframe}
 
-    \begin{frame}{Title}
-        Hello metropolis!
-    \end{frame}
-
     \section{\S2.3.5 Sequential estimation}
-
-    \begin{frame}{Title}
-        Hello metropolis!
+    
+    \begin{frame}{Motivation of Sequential Estimation}
+        \begin{itemize}
+            \item In the prev section, 
+                whole data points $\mathbf x_1, \cdots, \mathbf x_N$ are simultaneously used for the parameter estimation.
+            \item Sequential methods allow data points to be processed one at a time and then discarded.
+            \item Sequential methods are important for
+                \begin{itemize}
+                    \item on-line apps
+                    \item large $N$ data sets are involved so that batch processing of all data points at once is infeasible
+                \end{itemize}
+        \end{itemize}
     \end{frame}
 
-    \begin{frame}{Title}
-        Hello metropolis!
+    \begin{frame}{What is the contribution of the latest data?}
+        Consider the ML estimator of the mean based on $N$ data points: 
+        \begin{align*}
+            \bm\mu_\mathrm{ML}^{(N)} &= \frac{1}{N}\sum_{n=1}^N \mathbf x_n \\
+            &= \frac{1}{N}\mathbf x_N + \frac{1}{N}\sum_{n=1}^{N-1} \mathbf x_n \\
+            &= \frac{1}{N}\mathbf x_N + \frac{N-1}{N}\cdot\highlightcap[red]{\displaystyle\frac{1}{N-1}\sum_{n=1}^{N-1} \mathbf x_n}{$\bm\mu_\mathrm{ML}^{(N-1)}$} \\
+            &= \highlightcap<2->[blue]{\bm\mu_\mathrm{ML}^{(N-1)}}{old estimator}
+             + \highlightcap<2->[blue]{\displaystyle\frac{1}{N}}{inversely \\ prop to $N$}
+               \highlightcap<2->[blue]{\nbracket{\mathbf x_N - \bm\mu_\mathrm{ML}^{(N-1)}}}{contrib of \\ $N$-th data} \tag{2.126}
+        \end{align*}
+    \end{frame}
+    
+    \begin{frame}{Derive a more general formulation of sequential learning}
+        \begin{itemize}
+            \item Consider random variables $\theta$ and $z$ governed by $p(z, \theta)$.
+            \item The regression function is given by:
+                \begin{align*}
+                    f(\theta) \equiv \mathbb E[z|\theta] = \int zp(\theta) \:\mathrm dz \tag{2.127}
+                \end{align*}
+                \begin{figure}[h]\centering
+                    \includegraphics[height=4.0cm]{./figs/Figure2_10.pdf}Figure 2.10
+                \end{figure}
+            \item Now, we want to find the root $\theta^*$ at which $f(\theta^*) = 0$ without modeling $f(\theta)$.
+            \item A general procedure to solve such problems was given by Robbins and Monro (1951).
+        \end{itemize}
+
     \end{frame}
 
-    \begin{frame}{Title}
-        Hello metropolis!
+    \begin{frame}{Robbins-Monro Algorithm}
+        Assumptions:
+        \begin{itemize}
+            \item Conditional variance of $z$ is finite:
+                \begin{align*}
+                    \mathbb E[(z - f)^2 | \theta] < \infty \tag{2.128}
+                \end{align*}
+            \item $f(\theta) > 0$ for $\theta > \theta^*$ and $f(\theta) < 0$ for $\theta < \theta^*$
+                \begin{itemize}
+                    \item A unique root actually exists.
+                \end{itemize}
+                \begin{figure}[h]\centering
+                    \includegraphics[height=2.5cm]{./figs/Figure2_10.pdf}Figure 2.10
+                \end{figure}
+        \end{itemize}
+        Procedure for estimating the root $\theta^*$ is given by
+        \begin{align*}
+            \theta^{(N)} = \theta^{(N-1)} - a_{N-1}z(\theta^{(N-1)}) \tag{2.129}
+        \end{align*}
+        where $z(\theta^{(N-1)})$ is an observed value of $z$ when $\theta$ takes the value $\theta^{(N)}$.
+    \end{frame}
+
+    \begin{frame}{Robbins-Monro Algorithm}
+        The sequence of successive estimates of the root $\theta^*$:
+        \begin{align*}
+            \theta^{(N)} = \theta^{(N-1)} - a_{N-1}z(\theta^{(N-1)}) \tag{2.129}
+        \end{align*}
+        where, a sequence of positive numbers $\{a_N\}$ satisfies:
+        \begin{align*}
+            \lim_{N\to\infty} a_N = 0, \; \sum_{N=1}^\infty a_N = \infty, \;\mbox{and}\; \sum_{N=1}^\infty a_N^2 < \infty \tag{2.130-132}
+        \end{align*}
+        The conditions ensure that the sequence of estimates converge to the root with probability one (Robbins and Monro, 1951;Fukunaga, 1990).
+    \end{frame}
+
+    \begin{frame}{Solve a general ML problem sequentially using the Robbins-Monro Algorithm}
+        By definition, the ML solution $\theta_\mathrm{ML}$ is a stationary point of the log-likelihood and hence satisfies:
+        \begin{align*}
+            \left.\frac{\partial}{\partial\theta}\cbracket{-\frac{1}{N}\sum_{n=1}^N\ln p(x_n | \theta)}\right|_{\theta_\mathrm{ML}} = 0 \tag{2.133}
+        \end{align*}
+        Exchanging the derivative and sum, and taking the limit as $N \to \infty$, we have:
+        \begin{align*}
+            -\lim_{N\to\infty} \frac{1}{N}\sum_{n=1}^N\frac{\partial}{\partial\theta}\ln p(x_n | \theta)
+            = \highlightcap[red]{\displaystyle\mathbb E_x\rbracket{-\frac{\partial}{\partial\theta}\ln p(x | \theta)}}{regression function} \tag{2.134}
+        \end{align*}
+        and so we see that \bluetext{finding the ML solution corresponds to finding the root of a regression function. 
+        We can therefore apply the Robbins-Monro procedure!}
+    \end{frame}
+
+    \begin{frame}{Solve a general ML problem sequentially using the Robbins-Monro Algorithm}
+        By applying the Robbins-Monro procedure, which now takes the form:
+        \begin{align*}
+            \theta^{(N)} = \theta^{(N-1)} - a_{N-1}\frac{\partial}{\partial\theta^{(N-1)}} \ln p(x_N | \theta^{(N-1)}) \tag{2.135}
+        \end{align*}
+        Example of estimating $\mu_\mathrm{ML}^{(N)}$ of a Gaussian :
+        \begin{align*}
+            z = -\frac{\partial}{\partial\mu_\mathrm{ML}}\ln p(x | \mu_\mathrm{ML}, \sigma^2) = -\frac{1}{\sigma^2}(x - \mu_\mathrm{ML}) \tag{2.136}
+        \end{align*}
+    \end{frame}
+
+    \begin{frame}{Solve a general ML problem sequentially using the Robbins-Monro Algorithm}
+        \begin{align*}
+            z &= -\frac{\partial}{\partial\mu_\mathrm{ML}}\ln p(x | \mu_\mathrm{ML}, \sigma^2) = -\frac{1}{\sigma^2}(x - \mu_\mathrm{ML}) \tag{2.136} \\
+            \mathbb E[z] &= \frac{1}{\sigma^2}(\mu - \mu_\mathrm{ML})
+        \end{align*}
+        \begin{figure}[h]\centering
+            \includegraphics[height=3.5cm]{./figs/Figure2_10.pdf}
+            \includegraphics[height=3.5cm]{./figs/Figure2_11.pdf}Figure 2.10 \& 2.11
+        \end{figure}
     \end{frame}
 
     \section{\S2.3.6 Bayesian inference for the Gaussian}
-
-    \begin{frame}{Maximum Likelihood Estimation vs. Bayesian Inference}
-        Hello metropolis!
-    \end{frame}
 
     \begin{frame}{The task of inferring the mean $\mu$ (the variance $\sigma^2$ is known)}
         \begin{itemize}
@@ -1044,12 +1135,12 @@
     \end{frame}
 
     \begin{supframe}{Solution of Exercise 2.38}
-
+        Complete the square!
     \end{supframe}
     
-    \begin{supframe}{Solution of Exercise 2.40}
-
-    \end{supframe}
+    % \begin{supframe}{Solution of Exercise 2.40}
+    %     kk
+    % \end{supframe}
     
     \begin{frame}{Interpretation of the posterior's params}
         \begin{columns}
@@ -1197,9 +1288,9 @@
         \end{itemize}
     \end{frame}
 
-    \begin{frame}{Summary: conjugate priors in the case of the univariate Gaussian}
+    %\begin{frame}{Summary: conjugate priors in the case of the univariate Gaussian}
 
-    \end{frame}
+    %\end{frame}
 
     \begin{frame}{In the case of the multivariate Gaussian $\mathcal N(\mathbf x | \bm\mu, \bm\Lambda^{-1})$ for a $D$-dim vector $\mathbf x$}
         \begin{itemize}
@@ -1289,20 +1380,50 @@
         \end{figure}
     \end{frame}
 
-    \begin{supframe}{Exercise 2.47}
-        Hello metropolis!
-    \end{supframe}
+    %\begin{supframe}{Exercise 2.47}
+    %    Hello metropolis!
+    %\end{supframe}
 
-    \begin{frame}{Properties of the t-distribution (1/2): the robustness}
-        Hello metropolis!
+    \begin{frame}{Robustness of Students's t-distribution}
+        The t-distribution has longer `tails' than a Gaussian.
+        \begin{align*}
+            \mathcal N(x | \mu, \sigma^2)
+            &= \frac{1}{\nbracket{2\pi\sigma^2}^{1/2}}\highlightcap<2->[blue]{\displaystyle\exp\cbracket{-\frac{1}{2\sigma^2}(x - \mu)^2}}{exp func of $x$} \tag{1.46} \\
+            \mathrm{St}(x | \mu, \lambda, \nu)
+            &= \frac{\Gamma(\nu/2+1/2)}{\Gamma(\nu / 2)} \nbracket{\frac{\lambda}{\pi\nu}}^{1/2}
+                \highlightcap<2->[blue]{\displaystyle\rbracket{1 + \frac{\lambda(x-\mu)^2}{\nu}}^{-\nu/2-1/2}}{power func of $x$} \tag{2.159}
+        \end{align*}\vspace{-10mm}
+        \begin{figure}[h]\centering
+            \includegraphics[height=4.0cm]{./figs/Figure2_16a.pdf}
+            \includegraphics[height=4.0cm]{./figs/Figure2_16b.pdf} (Figure 2.16)
+        \end{figure}
     \end{frame}
 
-    \begin{frame}{Title}
-        Hello metropolis!
+    \begin{frame}{Generalization of the t-distribution to a multivariate case}
+        \begin{itemize}
+            \item Recall:
+                \begin{align*}
+                    p(x | \mu, a, b)
+                    &= \int_0^\infty \mathcal N(x | \mu, \tau^{-1}) \mathrm{Gam}(\tau | a, b) \:\mathrm d\tau \tag{2.158}
+                \end{align*}
+            \item By substituting $\nu = 2a$, $\lambda = a/b$ and $\eta = \tau b / a$, 
+                \begin{align*}
+                    \mathrm{St}(x | \mu, \lambda, \nu)
+                    &= \int_0^\infty \mathcal N(x | \mu, (\eta\lambda)^{-1}) \mathrm{Gam}(\tau | \nu/2, \nu/2) \:\mathrm d\eta \tag{2.161}
+                \end{align*}
+            \item We can generalize (2.162) to the corresponding multivariate Student's t-distribution:
+                \begin{align*}
+                    \mathrm{St}(\mathbf x | \bm\mu, \bm\Lambda, \nu)
+                    &= \int_0^\infty \mathcal N(\mathbf x | \bm\mu, (\eta\bm\Lambda)^{-1}) \mathrm{Gam}(\eta | \nu/2, \nu/2) \:\mathrm d\eta \tag{2.162} \\
+                    &= \frac{\Gamma(D/2+\nu/2)}{\Gamma(\nu/2)}\frac{|\bm\Lambda|^{1/2}}{(\pi\nu)^{D/2}}
+                        \rbracket{1 + \frac{\Delta^2}{\nu}}^{-D/2-\nu/2} \tag{2.162} \\
+                    \Delta^2 &= (\mathbf x - \bm\mu)^\top\bm\Lambda(\mathbf x - \bm\mu) \tag{2.163}
+                \end{align*}
+        \end{itemize}
     \end{frame}
 
-    \begin{frame}{Title}
-        Hello metropolis!
-    \end{frame}
+    %\begin{frame}{Title}
+    %    Hello metropolis!
+    %\end{frame}
 
 \end{document}
