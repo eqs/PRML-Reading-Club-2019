@@ -124,6 +124,18 @@
         \end{itemize}
     \end{frame}
     
+    \begin{frame}{Image for Probabilistic Estimation}
+        \begin{itemize}
+            \item $\mathbf x$: location of a target (unknown)
+            \item $\mathbf y$: value of a sensor (known)
+                \begin{figure}[h]\centering
+                    \includegraphics[width=9.0cm]{./figs/bayes.pdf}
+                \end{figure}
+            \item Goal: Estimate the location using observations
+            \item All computations are analytically tractable for Gaussians.
+        \end{itemize}
+    \end{frame}
+    
     \section{\S2.3.1 Conditional Gaussian Distribution}
     
     \begin{frame}{Completing the square (for univariate case)}
@@ -573,6 +585,18 @@
     
     \section{\S2.3.3 Bayes' theorem for Gaussian variables}
     
+    \begin{frame}{(Recall) Image for Probabilistic Estimation}
+        \begin{itemize}
+            \item $\mathbf x$: location of a target (unknown)
+            \item $\mathbf y$: value of a sensor (known)
+                \begin{figure}[h]\centering
+                    \includegraphics[width=9.0cm]{./figs/bayes.pdf}
+                \end{figure}
+            \item Goal: Estimate the location using observations
+            \item All computations are analytically tractable for Gaussians.
+        \end{itemize}
+    \end{frame}
+
     \begin{frame}{Problem: find an expression for the conditional distribution}
         \begin{itemize}
             \item Here, we shall suppose that we are given:
@@ -597,7 +621,7 @@
                 \end{itemize}
         \end{itemize}
     \end{frame}
-
+    
     \begin{frame}{Why we want to find the conditional dist $p(\mathbf x | \mathbf y)$?}
         \begin{itemize}
             \item Recall:
