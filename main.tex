@@ -103,6 +103,34 @@
         \myinsertlogo{naist.pdf}
     \end{frame}
     
+    \begin{frame}{Motivation}
+        \begin{itemize}
+            \item Purpose: \textit{density estimation}
+                \begin{itemize}
+                    \item To model the probability distribution $p(\mathbf x)$ of a random var $\mathbf x$, 
+                        given a finite set of observations.
+                \end{itemize}
+            \item Parametric and non-parametric models
+            \item Frequentist and Bayesian treatments
+                \begin{itemize}
+                    \item frequentist: choose specific values of the params by optimizing some criterion (e.g. the likelihood)
+                    \item Bayesian: introduce prior over the params and compute the corresponding posterior
+                \end{itemize}
+        \end{itemize}
+    \end{frame}
+    
+    \begin{frame}{Image for Probabilistic Estimation}
+        \begin{itemize}
+            \item $\mathbf x$: location of a target (unknown)
+            \item $\mathbf y$: value of a sensor (known)
+                \begin{figure}[h]\centering
+                    \includegraphics[width=9.0cm]{./figs/bayes.pdf}
+                \end{figure}
+            \item Goal: Estimate the location using observations
+            \item All computations are analytically tractable for Gaussians.
+        \end{itemize}
+    \end{frame}
+    
     \begin{frame}{Table of Contents}
         \begin{itemize}
             \item Important properties of Gaussian distributions
@@ -121,18 +149,6 @@
                 \begin{itemize}
                     \item \S2.3.7 Students's t-distribution
                 \end{itemize}
-        \end{itemize}
-    \end{frame}
-    
-    \begin{frame}{Image for Probabilistic Estimation}
-        \begin{itemize}
-            \item $\mathbf x$: location of a target (unknown)
-            \item $\mathbf y$: value of a sensor (known)
-                \begin{figure}[h]\centering
-                    \includegraphics[width=9.0cm]{./figs/bayes.pdf}
-                \end{figure}
-            \item Goal: Estimate the location using observations
-            \item All computations are analytically tractable for Gaussians.
         \end{itemize}
     \end{frame}
     
@@ -269,16 +285,16 @@
             -\frac{1}{2}(\mathbf x_b - \bm\mu_b)^\top \bm\Lambda_{bb}(\mathbf x_b - \bm\mu_b) \tag{2.70} \\
             %---------------
             \onslide<2->{
-            &= -\frac{1}{2}\left( \highlight[red]{\mathbf x_a^\top\bm\Lambda_{aa}\mathbf x_a} - \highlight[red]{\mathbf x_a^\top\bm\Lambda_{aa}\bm\mu_a} - 
-                               \highlight[red]{\bm\mu_a^\top\bm\Lambda_{aa}\mathbf x_a} + \bm\mu_a^\top\bm\Lambda_{aa}\bm\mu_a \right) \\
-            &\qquad -\frac{1}{2}\left( \mathbf x_a^\top\bm\Lambda_{ab}\mathbf x_b - \highlight[red]{\mathbf x_a^\top\bm\Lambda_{ab}\bm\mu_b} - 
+            &= -\frac{1}{2}\left( \highlight[red]{\mathbf x_a^\top\bm\Lambda_{aa}\mathbf x_a} - \highlight[blue]{\mathbf x_a^\top\bm\Lambda_{aa}\bm\mu_a} - 
+                               \highlight[blue]{\bm\mu_a^\top\bm\Lambda_{aa}\mathbf x_a} + \bm\mu_a^\top\bm\Lambda_{aa}\bm\mu_a \right) \\
+            &\qquad -\frac{1}{2}\left( \mathbf x_a^\top\bm\Lambda_{ab}\mathbf x_b - \highlight[blue]{\mathbf x_a^\top\bm\Lambda_{ab}\bm\mu_b} - 
                                \bm\mu_a^\top\bm\Lambda_{ab}\mathbf x_b + \bm\mu_a^\top\bm\Lambda_{ab}\bm\mu_b \right) \\
             &\qquad -\frac{1}{2}\left( \mathbf x_b^\top\bm\Lambda_{ba}\mathbf x_a - \mathbf x_b^\top\bm\Lambda_{ba}\bm\mu_a - 
-                               \highlight[red]{\bm\mu_b^\top\bm\Lambda_{ba}\mathbf x_a} + \bm\mu_b^\top\bm\Lambda_{ba}\bm\mu_a \right) \\
+                               \highlight[blue]{\bm\mu_b^\top\bm\Lambda_{ba}\mathbf x_a} + \bm\mu_b^\top\bm\Lambda_{ba}\bm\mu_a \right) \\
             &\qquad -\frac{1}{2}\left( \mathbf x_b^\top\bm\Lambda_{bb}\mathbf x_b - \mathbf x_b^\top\bm\Lambda_{bb}\bm\mu_b - 
                                \bm\mu_b^\top\bm\Lambda_{bb}\mathbf x_b + \bm\mu_b^\top\bm\Lambda_{bb}\bm\mu_b \right) \\
-            &= \highlightcap[red]{\displaystyle -\frac{1}{2}\mathbf x_a^\top\bm\Lambda_{aa}\mathbf x_a}{\small The second order term}
-                + \highlightcap[red]{\mathbf x_a^\top(\bm\Lambda_{aa}\bm\mu_a + \bm\Lambda_{ab}\bm\mu_b)}{The linear term}
+            &= \highlightcap[red]{\displaystyle -\frac{1}{2}\mathbf x_a^\top\bm\Lambda_{aa}\mathbf x_a}{\small The quadratic term}
+                + \highlightcap[blue]{\mathbf x_a^\top(\bm\Lambda_{aa}\bm\mu_a + \bm\Lambda_{ab}\bm\mu_b)}{The linear term}
                 + \mathrm{const.}
             }
         \end{align*}
@@ -864,6 +880,14 @@
         \end{itemize}
     \end{frame}
 
+    \begin{frame}{A frequentist treatment vs.\ a Bayesian treatment}
+        To model the dist of a random var using \textit{parametric} dist, given observations, 
+        \begin{itemize}
+            \item frequentist: choose specific values of the params by optimizing some criterion (e.g. the likelihood)
+            \item Bayesian: introduce prior over the params and compute the corresponding posterior
+        \end{itemize}
+    \end{frame}
+
     \begin{frame}{Maximum likelihood estimation for the Gaussian}
         Maximize the likelihood with regard to $\bm\mu$ and $\bm\Sigma^{-1}$ (i.e. precision $\bm\Lambda$)
         \begin{align*}
@@ -986,8 +1010,56 @@
         \end{align*}
     \end{frame}
     
-    \begin{supframe}{Solution of Ex.(2.35)}
-
+    \begin{supframe}{Solution of Exercise 2.35 (1/3)}
+        \begin{itemize}
+            \item Derivation of (2.62) using (2.59): See the text.
+            \item Derivation of (2.291)
+                \begin{align*}
+                    \mathbb E[\mathbf x_n\mathbf x_m^\top] = \bm\mu\bm\mu^\top + I_{nm}\bm\Sigma \tag{2.291}
+                \end{align*}
+                \begin{enumerate}
+                    \item[(i)] In the case $n = m$, from (2.62), we have
+                        \begin{align*}
+                            \mathbb E[\mathbf x_n\mathbf x_m^\top] = \bm\mu\bm\mu^\top + \bm\Sigma
+                        \end{align*}
+                    \item[(ii)] In the case $n \not = m$, 
+                        \begin{align*}
+                            &\mathbb E[\mathbf x_n\mathbf x_m^\top] \\
+                            &= \iint p(\mathbf x_n, \mathbf x_m)\mathbf x_n\mathbf x_m^\top \:\mathrm d\mathbf x_n\mathrm d\mathbf x_m \\
+                            &= \nbracket{\int p(\mathbf x_n)\mathbf x_n \:\mathrm d\mathbf x_n}
+                                \nbracket{\int p(\mathbf x_m)\mathbf x_m^\top \:\mathrm d\mathbf x_m} \;\;(\because \mbox{i.i.d.}) \\
+                            &= \mathbb E[\mathbf x_n]\mathbb E[\mathbf x_m]^\top \\
+                            &= \bm\mu\bm\mu^\top
+                        \end{align*}
+                \end{enumerate}
+            \item Derivation of (2.124): next slide
+        \end{itemize}
+    \end{supframe}
+    
+    \begin{supframe}{Solution of Exercise 2.35 (2/3)}
+        \begin{align*}
+            &\mathbb E[\bm\Sigma_\mathrm{ML}] \\
+            &= \mathbb E\rbracket{\frac{1}{N}\sum_{n=1}^N (\mathbf x_n - \bm\mu_\mathrm{ML})(\mathbf x_n - \bm\mu_\mathrm{ML})^\top} \\
+            &= \frac{1}{N}\sum_{n=1}^N \mathbb E\rbracket{(\mathbf x_n - \bm\mu_\mathrm{ML})(\mathbf x_n - \bm\mu_\mathrm{ML})^\top} \\
+            &= \frac{1}{N}\sum_{n=1}^N 
+                \mathbb E\rbracket{\cbracket{(\mathbf x_n - \bm\mu_\mathrm{ML}) - (\bm\mu_\mathrm{ML} - \bm\mu)}
+                                    \cbracket{(\mathbf x_n - \bm\mu_\mathrm{ML}) - (\bm\mu_\mathrm{ML} - \bm\mu)}^\top} \\
+            &= \highlightcap[red]{\displaystyle\frac{1}{N}\sum_{n=1}^N \mathbb E\rbracket{(\mathbf x_n - \bm\mu)(\mathbf x_n - \bm\mu)^\top}}{$\bm\Sigma$}
+                - 2\cdot\highlightcap[red]{\displaystyle\frac{1}{N}\sum_{n=1}^N \mathbb E\rbracket{(\mathbf x_n - \bm\mu)(\bm\mu_\mathrm{ML} - \bm\mu)^\top}}{$\mathbb E\rbracket{(\bm\mu_\mathrm{ML} - \bm\mu)(\bm\mu_\mathrm{ML} - \bm\mu)^\top}$} \\
+            & \quad + \frac{1}{N}\sum_{n=1}^N \mathbb E\rbracket{(\bm\mu_\mathrm{ML} - \bm\mu)(\bm\mu_\mathrm{ML} - \bm\mu)^\top}
+        \end{align*}
+    \end{supframe}
+    
+    \begin{supframe}{Solution of Exercise 2.35 (3/3)}
+        \begin{align*}
+            &\mathbb E[\bm\Sigma_\mathrm{ML}] \\
+            &= \bm\Sigma - \mathbb E\rbracket{(\bm\mu_\mathrm{ML} - \bm\mu)(\bm\mu_\mathrm{ML} - \bm\mu)^\top} \\
+            &= \bm\Sigma - \nbracket{\mathbb E\rbracket{\bm\mu_\mathrm{ML}\bm\mu_\mathrm{ML}^\top} - \bm\mu\bm\mu^\top} \\
+            &= \bm\Sigma - \nbracket{\frac{1}{N^2}\sum_{n=1}^N\sum_{m=1}^N \mathbb E\rbracket{\mathbf x_n\mathbf x_m^\top} - \bm\mu\bm\mu^\top} \\
+            &= \bm\Sigma - \nbracket{\frac{1}{N^2}\sum_{n=1}^N\sum_{m=1}^N \nbracket{\bm\mu\bm\mu^\top + I_{nm}\bm\Sigma} - \bm\mu\bm\mu^\top} \;\; (\because \mbox{2.291})\\
+            &= \bm\Sigma - \nbracket{\frac{1}{N^2}\nbracket{N^2\bm\mu\bm\mu^\top + N\bm\Sigma} - \bm\mu\bm\mu^\top}  \\
+            &= \frac{N-1}{N}\bm\Sigma \\
+        \end{align*}
     \end{supframe}
 
     \section{\S2.3.5 Sequential estimation}
@@ -1022,7 +1094,7 @@
             \item Consider random variables $\theta$ and $z$ governed by $p(z, \theta)$.
             \item The regression function is given by:
                 \begin{align*}
-                    f(\theta) \equiv \mathbb E[z|\theta] = \int zp(\theta) \:\mathrm dz \tag{2.127}
+                    f(\theta) \equiv \mathbb E[z|\theta] = \int zp(z | \theta) \:\mathrm dz \tag{2.127}
                 \end{align*}
                 \begin{figure}[h]\centering
                     \includegraphics[height=4.0cm]{./figs/Figure2_10.pdf}Figure 2.10
@@ -1095,7 +1167,7 @@
     \begin{frame}{Solve a general ML problem sequentially using the Robbins-Monro Algorithm}
         \begin{align*}
             z &= -\frac{\partial}{\partial\mu_\mathrm{ML}}\ln p(x | \mu_\mathrm{ML}, \sigma^2) = -\frac{1}{\sigma^2}(x - \mu_\mathrm{ML}) \tag{2.136} \\
-            \mathbb E[z] &= \frac{1}{\sigma^2}(\mu - \mu_\mathrm{ML})
+            \mathbb E[z | \theta] &= \frac{1}{\sigma^2}(\mu - \mu_\mathrm{ML})
         \end{align*}
         \begin{figure}[h]\centering
             \includegraphics[height=3.5cm]{./figs/Figure2_10.pdf}
@@ -1104,6 +1176,36 @@
     \end{frame}
 
     \section{\S2.3.6 Bayesian inference for the Gaussian}
+    
+    \begin{frame}{A frequentist treatment vs.\ a Bayesian treatment}
+        To model the dist of a random var using \textit{parametric} dist, given observations, 
+        \begin{itemize}
+            \item frequentist: choose specific values of the params by optimizing some criterion (e.g. the likelihood)
+            \item Bayesian: introduce prior over the params and compute the corresponding posterior
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Recap: Bayesian inference for the binomial dist and conjugacy}
+        The binomial distribution:
+        \begin{align*}
+            \mathrm{Bin}(m | N, \mu) = \begin{pmatrix} N \\ m \end{pmatrix} \mu^m (1 - \mu)^{N-m} \tag{2.9}
+        \end{align*}
+
+        In order to develop a Bayesian treatment to model the distribution of observations, 
+        we need to introduce a prior $p(\mu)$.
+        \begin{align*}
+            p(\mu | N, m) \propto \mathrm{Bin}(m | N, \mu) p(\mu)
+        \end{align*}
+
+        If we choose a prior to be $c\mu^\beta(1-\mu)^\gamma$, 
+        the corresponding posterior $p(\mu | N, m)$ will have the same functional form as the prior (\redtext{conjugacy}).
+        
+        The beta distribution satisfies the conjugacy
+        \begin{align*}
+            \mathrm{Beta}(\mu | a, b) = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}\mu^{a-1} (1 - \mu)^{b-1} \tag{2.13}
+        \end{align*}
+
+    \end{frame}
 
     \begin{frame}{The task of inferring the mean $\mu$ (the variance $\sigma^2$ is known)}
         \begin{itemize}
@@ -1151,15 +1253,40 @@
                 we obtain the posterior (derivation: ex.\ 2.38):
                 \begin{align*}
                     p(\mu | \mathbf X) &= \mathcal N(\mu | \mu_N, \sigma_N^2) \tag{2.140} \\
-                    \mu_N &= \frac{\sigma^2}{N\sigma_0^2 + \sigma}\mu_0 + \frac{N\sigma_0^2}{N\sigma_0^2 + \sigma}\mu_\mathrm{ML} \tag{2.141} \\
+                    \mu_N &= \frac{\sigma^2}{N\sigma_0^2 + \sigma^2}\mu_0 + \frac{N\sigma_0^2}{N\sigma_0^2 + \sigma^2}\mu_\mathrm{ML} \tag{2.141} \\
                     \frac{1}{\sigma_N^2} &= \frac{1}{\sigma_0^2} + \frac{N}{\sigma^2} \tag{2.142}
                 \end{align*}
             \item The solution in $D$-dim Gaussian case is ex.\ 2.40.
         \end{itemize}
     \end{frame}
 
-    \begin{supframe}{Solution of Exercise 2.38}
-        Complete the square!
+    \begin{supframe}{Solution of Exercise 2.38 (1/2)}
+        From the product rule of probability, 
+        \begin{align*}
+            \ln p(\mu | \mathbf X)
+            &= \ln p(\mathbf X | \mu) + \ln p(\mu) + \mathrm{const.} \\
+            &= \sum_{n=1}^N \ln p(x_n | \mu) + \ln p(\mu) + \mathrm{const.} \\
+            &= -\frac{1}{2\sigma^2}\sum_{n=1}^N(x_n - \mu)^2 - \frac{1}{2\sigma_0^2}(\mu - \mu_0)^2 + \mathrm{const.} \\
+            &= -\frac{1}{2\sigma^2}\sum_{n=1}^N(\mu^2 - 2\mu x_n + x_n^2) - \frac{1}{2\sigma_0^2}(\mu^2 - 2\mu\mu_0 + \mu_0^2) + \mathrm{const.} \\
+            &= -\frac{1}{2\sigma^2}(N\mu^2 - 2\mu \abracket{x} + \abracket{x^2}) - \frac{1}{2\sigma_0^2}(\mu^2 - 2\mu\mu_0 + \mu_0^2) + \mathrm{const.} \\
+            & \quad \nbracket{\abracket{x} \equiv \sum_{n=1}^N x_n, \; \abracket{x^2} \equiv \sum_{n=1}^N x_n^2} \\
+        \end{align*}
+    \end{supframe}
+    
+    \begin{supframe}{Solution of Exercise 2.38 (2/2)}
+        \begin{align*}
+            \ln p(\mu | \mathbf X)
+            &= -\frac{1}{2\sigma^2}(N\mu^2 - 2\mu \abracket{x} + \abracket{x^2}) - \frac{1}{2\sigma_0^2}(\mu^2 - 2\mu\mu_0 + \mu_0^2) + \mathrm{const.} \\
+            &= -\frac{1}{2\sigma^2}\cbracket{\nbracket{\frac{N}{\sigma^2} + \frac{1}{\sigma_0^2}}\mu^2 - 2\nbracket{\frac{\abracket{x}}{\sigma^2} + \frac{\mu_0}{\sigma_0^2}}\mu} + \mathrm{const.} \\
+            &= -\frac{1}{2}\cdot\frac{N\sigma_0^2 + \sigma^2}{\sigma^2\sigma_0^2}
+                \nbracket{\mu^2 - 2 \frac{\abracket{x}\sigma_0^2 + \mu_0\sigma^2}{N\sigma_0^2 + \sigma^2} \mu} + \mathrm{const.} \\
+            &= -\frac{(\mu - \mu_N)^2}{2\sigma_N^2} + \mathrm{const.}
+        \end{align*}
+        where, 
+        \begin{align*}
+            \mu_N &= \frac{\sigma^2}{N\sigma_0^2 + \sigma^2}\mu_0 + \frac{N\sigma_0^2}{N\sigma_0^2 + \sigma^2}\mu_\mathrm{ML} \tag{2.141} \\
+            \frac{1}{\sigma_N^2} &= \frac{1}{\sigma_0^2} + \frac{N}{\sigma^2} \tag{2.142}
+        \end{align*}
     \end{supframe}
     
     % \begin{supframe}{Solution of Exercise 2.40}
@@ -1171,7 +1298,7 @@
             \begin{column}{0.50\hsize}
                 \begin{align*}
                     p(\mu | \mathbf X) &= \mathcal N(\mu | \mu_N, \sigma_N^2) \tag{2.140} \\
-                    \mu_N &= \highlightcap<2->[red]{\displaystyle\frac{\sigma^2}{N\sigma_0^2 + \sigma}\mu_0 + \frac{N\sigma_0^2}{N\sigma_0^2 + \sigma}\mu_\mathrm{ML}}{\small $\mu_N$ intervene between $\mu_0$ and $\mu_\mathrm{ML}$} \tag{2.141} \\
+                    \mu_N &= \highlightcap<2->[red]{\displaystyle\frac{\sigma^2}{N\sigma_0^2 + \sigma^2}\mu_0 + \frac{N\sigma_0^2}{N\sigma_0^2 + \sigma^2}\mu_\mathrm{ML}}{\small $\mu_N$ intervene between $\mu_0$ and $\mu_\mathrm{ML}$} \tag{2.141} \\
                     \frac{1}{\sigma_N^2} &= \highlightcapright<2->[red]{\displaystyle\frac{1}{\sigma_0^2} + \frac{N}{\sigma^2}}{\small Monotone function of $N$} \tag{2.142}
                 \end{align*}
             \end{column}
@@ -1198,6 +1325,10 @@
             \item<3-> The posterior after observing $N-1$ data can be viewed as a prior to arriving a posterior after observing $N$-th data.
             \item<3-> The sequential view is very general and applies to any problem in which the observed data are assumed to be i.i.d.
         \end{itemize}
+    \end{frame}
+    
+    \begin{frame}{Demonstration of a Bayesian sequential estimation}
+        See Jupyter Notebook.
     \end{frame}
     
     \begin{frame}{The task of inferring the precision $\lambda \equiv 1/\sigma^2$ (the mean $\mu$ is known)}
@@ -1271,7 +1402,10 @@
                 \end{align*}
             \item Interpretation of the posterior's params
                 \begin{itemize}
-                    \item From (2.150), we see that observing $N$ data increases $a$ by $N/2$.
+                    \item $a_N$ and $b_N$ can be interpret like an \textit{effective number of observations} (see \S2.2).
+                    \item From (2.150) and (2.151), 
+                        we see that introducing a prior $\mathrm{Gam}(\lambda | a_0, b_0)$ corresponds to
+                        we have the $2a_0$ effective observations having variance $b_0/a_0$ in the prior.
                 \end{itemize}
         \end{itemize}
     \end{frame}
@@ -1312,30 +1446,51 @@
         \end{itemize}
     \end{frame}
 
-    %\begin{frame}{Summary: conjugate priors in the case of the univariate Gaussian}
+    \begin{frame}{The conjugate priors in the case of the univariate Gaussian}
+        \begin{itemize}
+            \item For known mean $\mu$ and unknown precision $\lambda$, the conjugate prior is a Gaussian:
+                \begin{align*}
+                    p(\mu) = \mathcal N(\mu | \mu_0, \lambda_0^{-1})
+                \end{align*}
+            \item For unknown mean $\mu$ and known precision $\lambda$, the conjugate prior is the \textit{gamma} distribution:
+                \begin{align*}
+                    p(\lambda) = \mathrm{Gam}(\lambda | a_0, b_0)
+                \end{align*}
+            \item For both the mean and the precision are unknown, the conjugate prior is the \textit{normal-gamma} distribution:
+                \begin{align*}
+                    p(\mu, \lambda)
+                    = \mathcal N(\mu | \mu_0, (\beta\lambda)^{-1}) \mathrm{Gam}(\lambda | a, b) \tag{2.154}
+                \end{align*}
+        \end{itemize}
+    \end{frame}
 
-    %\end{frame}
-
-    \begin{frame}{In the case of the multivariate Gaussian $\mathcal N(\mathbf x | \bm\mu, \bm\Lambda^{-1})$ for a $D$-dim vector $\mathbf x$}
+    \begin{frame}{The conjugate priors in the case of the multivariate Gaussian}
         \begin{itemize}
             \item For known mean $\bm\mu$ and unknown precision $\bm\Lambda$, the conjugate prior is a Gaussian:
-                $p(\bm\mu) = \mathcal N(\bm\mu | \bm\mu_0, \bm\Lambda_0^{-1})$
+                \begin{align*}
+                    p(\bm\mu) = \mathcal N(\bm\mu | \bm\mu_0, \bm\Lambda_0^{-1})
+                \end{align*}
             \item For unknown mean $\bm\mu$ and known precision $\bm\Lambda$, the conjugate prior is the \textit{Wishart} distribution:
                 \begin{align*}
                     p(\bm\Lambda) = \mathcal W(\bm\Lambda | \mathbf W, \nu)
-                    = B |\bm\Lambda|^{(\nu - D - 1)/2}\exp\nbracket{-\frac{1}{2}\tr(\mathbf W^{-1}\bm\Lambda)} \tag{2.155}
                 \end{align*}
-                \vspace{-7.5mm}
-                \begin{itemize}
-                    \item $\nu$ is the number of \textit{degrees of freedom}.
-                    \item $\mathbf W \in \mathbb R^{D\times D}$
-                    \item $B$ is a nomalization constant (2.156).
-                \end{itemize}
             \item For both the mean and the precision are unknown, the conjugate prior is the \textit{normal-Wishart} distribution:
                 \begin{align*}
                     p(\bm\mu, \bm\Lambda | \bm\mu_0, \beta, \mathbf W, \nu)
                     = \mathcal N(\bm\mu | \bm\mu_0, (\beta\bm\Lambda)^{-1}) \mathcal W(\bm\Lambda | \mathbf W, \nu) \tag{2.157}
                 \end{align*}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{The Wishart distribution}
+        \begin{align*}
+            p(\bm\Lambda) = \mathcal W(\bm\Lambda | \mathbf W, \nu)
+            = B |\bm\Lambda|^{(\nu - D - 1)/2}\exp\nbracket{-\frac{1}{2}\tr(\mathbf W^{-1}\bm\Lambda)} \tag{2.155}
+        \end{align*}
+        \begin{itemize}
+            \item $\nu$ is the number of \textit{degrees of freedom}.
+            \item $\mathbf W \in \mathbb R^{D\times D}$
+            \item $B$ is a nomalization constant (2.156).
         \end{itemize}
     \end{frame}
 
@@ -1443,6 +1598,27 @@
                         \rbracket{1 + \frac{\Delta^2}{\nu}}^{-D/2-\nu/2} \tag{2.162} \\
                     \Delta^2 &= (\mathbf x - \bm\mu)^\top\bm\Lambda(\mathbf x - \bm\mu) \tag{2.163}
                 \end{align*}
+        \end{itemize}
+    \end{frame}
+    
+    \begin{frame}{Summary}
+        \begin{itemize}
+            \item Important properties of Gaussian distributions
+                \begin{itemize}
+                    \item \S2.3.1 Conditional Gaussian Distribution
+                    \item \S2.3.2 Marginal Gaussian Distribution
+                    \item \S2.3.3 Bayes' theorem for Gaussian variables
+                \end{itemize}
+            \item Parameter estimation for the Gaussian
+                \begin{itemize}
+                    \item \S2.3.4 Maximum likelihood for the Gaussian
+                    \item \S2.3.5 Sequential estimation
+                    \item \S2.3.6 Bayesian inference for the Gaussian
+                \end{itemize}
+            \item Student's t-distribution
+                \begin{itemize}
+                    \item \S2.3.7 Students's t-distribution
+                \end{itemize}
         \end{itemize}
     \end{frame}
 
